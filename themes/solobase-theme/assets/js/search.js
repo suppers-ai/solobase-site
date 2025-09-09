@@ -85,7 +85,7 @@ class DocsSearch {
 
   performSearch(query) {
     if (!this.isInitialized) {
-      return;
+      return [];
     }
 
     try {

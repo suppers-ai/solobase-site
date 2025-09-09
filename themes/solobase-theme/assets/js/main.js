@@ -72,15 +72,16 @@ const PerformanceUtils = {
     // Debounce function for performance
     debounce(func, wait, immediate) {
         let timeout;
-        return function executedFunction(...args) {
+        return function executedFunction() {
+            const args = arguments;
             const later = () => {
                 timeout = null;
-                if (!immediate) func(...args);
+                if (!immediate) func.apply(this, args);
             };
             const callNow = immediate && !timeout;
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
-            if (callNow) func(...args);
+            if (callNow) func.apply(this, args);
         };
     },
 
