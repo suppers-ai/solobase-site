@@ -41,7 +41,7 @@
     
     <!-- Styles -->
     {{ $options := (dict "targetPath" "css/main.css" "outputStyle" "compressed" "enableSourceMap" (not hugo.IsProduction)) }}
-    {{ $style := resources.Get "css/main.css" | resources.PostCSS $options }}
+    {{ $style := resources.Get "css/main.css" | css.PostCSS $options }}
     {{ if hugo.IsProduction }}
         {{ $style = $style | resources.Fingerprint }}
     {{ end }}
