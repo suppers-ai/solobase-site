@@ -1,0 +1,12 @@
+name: "Solobase Theme"
+license: "MIT"
+licenselink: "https://github.com/user/solobase/blob/main/LICENSE"
+description: "A modern theme for the Solobase demo site"
+homepage: "https://solobase.dev"
+tags: ["responsive", "modern", "admin", "dashboard"]
+features: ["responsive", "search", "demo-integration"]
+min_version: "0.112.0"
+
+author:
+  name: "Solobase Team"
+  homepage: "https://solobase.dev"

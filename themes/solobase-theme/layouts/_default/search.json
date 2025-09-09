@@ -1,0 +1,17 @@
+{{- $pages := where .Site.RegularPages "Section" "docs" -}}
+{{- $searchData := slice -}}
+{{- range $pages -}}
+  {{- $content := .Plain | htmlUnescape -}}
+  {{- $searchItem := dict 
+    "id" .File.UniqueID
+    "title" .Title
+    "description" .Description
+    "content" $content
+    "url" .RelPermalink
+    "section" .Section
+    "tags" .Params.tags
+    "weight" (.Params.weight | default 100)
+  -}}
+  {{- $searchData = $searchData | append $searchItem -}}
+{{- end -}}
+{{- $searchData | jsonify -}}

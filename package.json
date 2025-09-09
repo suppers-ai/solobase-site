@@ -1,0 +1,54 @@
+{
+  "name": "solobase-demo-site",
+  "version": "1.0.0",
+  "description": "Solobase demo site with Hugo and Tailwind CSS",
+  "main": "demo-manager/server.js",
+  "scripts": {
+    "start": "node demo-manager/server.js",
+    "dev": "nodemon demo-manager/server.js",
+    "build:css": "NODE_ENV=production tailwindcss -i ./themes/solobase-theme/assets/css/main.css -o ./static/css/main.min.css --minify",
+    "watch:css": "tailwindcss -i ./themes/solobase-theme/assets/css/main.css -o ./static/css/main.css --watch",
+    "build:hugo": "hugo --minify --gc --cleanDestinationDir",
+    "build": "npm run build:css && npm run build:hugo && npm run optimize:images && npm run generate:sw",
+    "build:prod": "NODE_ENV=production npm run build",
+    "dev:hugo": "hugo server --buildDrafts --buildFuture",
+    "optimize:images": "node scripts/optimize-images.js",
+    "generate:sw": "node scripts/generate-sw.js",
+    "test": "npm run test:build && npm run test:integration",
+    "test:build": "hugo --minify --gc --renderToMemory",
+    "test:integration": "node scripts/test-integration.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "rate-limiter-flexible": "^2.4.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "tailwindcss": "^3.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "postcss-cli": "^11.0.0",
+    "@fullhuman/postcss-purgecss": "^5.0.0",
+    "cssnano": "^6.0.1",
+    "workbox-build": "^7.0.0",
+    "sharp": "^0.32.4",
+    "@lhci/cli": "^0.13.0"
+  },
+  "keywords": [
+    "solobase",
+    "demo",
+    "container",
+    "management"
+  ],
+  "author": "Solobase Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

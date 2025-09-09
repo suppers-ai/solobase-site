@@ -1,0 +1,91 @@
+# Hugo default public folder
+/public/
+public/
+"public copy/"
+public copy/
+/resources/_gen/
+resources/
+
+# Hugo build lock file
+.hugo_build.lock
+".hugo_build copy.lock"
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Node modules (if using npm/yarn for assets)
+node_modules/
+node_modules copy/
+"node_modules copy/"
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+demo.env
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+
+# Hugo stats file (can be regenerated)
+hugo_stats.json
+
+# Demo manager specific
+demo-manager/data/
+demo-manager/logs/
+demo-manager/*.pid
+
+# Backup and copy files
+*.copy
+*copy/
+*\ copy/
+*\ copy.*
+*copy.*
+* copy/
+* copy.*
+"* copy/"
+"* copy.*"
+*.backup
+*.old
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Package lock files (optional - uncomment if you want to ignore)
+# package-lock.json
+# yarn.lock

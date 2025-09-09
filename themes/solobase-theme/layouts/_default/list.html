@@ -1,0 +1,44 @@
+{{ define "main" }}
+<div class="container mx-auto px-4 py-8">
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ .Title }}</h1>
+        {{ if .Description }}
+        <p class="text-xl text-gray-600">{{ .Description }}</p>
+        {{ end }}
+    </header>
+    
+    {{ if .Content }}
+    <div class="prose prose-lg max-w-none mb-12">
+        {{ .Content }}
+    </div>
+    {{ end }}
+    
+    {{ if .Pages }}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {{ range .Pages }}
+        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                    <a href="{{ .Permalink }}" class="hover:text-blue-600">{{ .Title }}</a>
+                </h2>
+                {{ if .Description }}
+                <p class="text-gray-600 mb-4">{{ .Description }}</p>
+                {{ else if .Summary }}
+                <p class="text-gray-600 mb-4">{{ .Summary }}</p>
+                {{ end }}
+                <div class="text-sm text-gray-500">
+                    {{ if .Date }}
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                    {{ end }}
+                    {{ if .ReadingTime }}
+                    <span class="mx-2">•</span>
+                    <span>{{ .ReadingTime }} min read</span>
+                    {{ end }}
+                </div>
+            </div>
+        </article>
+        {{ end }}
+    </div>
+    {{ end }}
+</div>
+{{ end }}

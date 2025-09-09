@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import minimalist overrides */
+@import './minimalist.css';
+
+/* Custom styles for Solobase demo site */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Base layer customizations */
+@layer base {
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Component layer */
+@layer components {
+  /* Custom prose styles for documentation */
+  .prose {
+    @apply max-w-none;
+  }
+
+  .prose pre {
+    @apply bg-gray-900 text-white rounded-lg overflow-x-auto;
+  }
+
+  .prose code {
+    @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose pre code {
+    @apply bg-transparent text-white px-0 py-0;
+  }
+
+  /* Responsive container */
+  .container-responsive {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive grid */
+  .grid-responsive {
+    @apply grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  /* Responsive text */
+  .text-responsive-xl {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
+
+  .text-responsive-lg {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .text-responsive-md {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+
+  /* Button components */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 sm:px-6 sm:py-3 
+           bg-primary-600 text-white font-semibold rounded-lg 
+           transition-all duration-200 ease-in-out
+           hover:bg-primary-700 hover:shadow-lg hover:-translate-y-0.5
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:transform active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 sm:px-6 sm:py-3
+           border-2 border-primary-600 text-primary-600 font-semibold rounded-lg
+           transition-all duration-200 ease-in-out
+           hover:bg-primary-600 hover:text-white hover:shadow-lg hover:-translate-y-0.5
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:transform active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 sm:px-6 sm:py-3
+           text-gray-600 font-medium rounded-lg
+           transition-all duration-200 ease-in-out
+           hover:bg-gray-100 hover:text-gray-900
+           focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  /* Demo frame styles */
+  #demo-frame {
+    @apply border border-gray-200 rounded-lg shadow-sm w-full h-96 sm:h-[500px] lg:h-[600px];
+  }
+
+  /* Navigation components */
+  .nav-link {
+    @apply px-3 py-2 text-sm font-medium text-gray-700 rounded-md
+           transition-all duration-200 ease-in-out
+           hover:text-primary-600 hover:bg-gray-100
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .nav-link.active {
+    @apply text-primary-600 bg-primary-50 font-semibold;
+  }
+
+  /* Mobile navigation */
+  .mobile-nav {
+    @apply fixed inset-0 z-50 bg-white transform transition-transform duration-300 ease-in-out;
+  }
+
+  .mobile-nav.closed {
+    @apply -translate-x-full;
+  }
+
+  /* Feature card components */
+  .feature-card {
+    @apply bg-white rounded-xl p-6 shadow-sm border border-gray-100
+           transition-all duration-300 ease-in-out
+           hover:shadow-lg hover:-translate-y-1 hover:border-primary-200;
+  }
+
+  .feature-icon {
+    @apply w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-primary-600;
+  }
+
+  /* Code block enhancements */
+  .code-block {
+    @apply relative bg-gray-900 rounded-lg overflow-hidden;
+  }
+
+  .code-copy-btn {
+    @apply absolute top-3 right-3 p-2 text-gray-400 rounded-md
+           transition-all duration-200 ease-in-out
+           hover:text-white hover:bg-gray-700
+           focus:outline-none focus:ring-2 focus:ring-gray-500;
+  }
+
+  /* Hero section */
+  .hero-section {
+    @apply relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-50;
+  }
+
+  .hero-content {
+    @apply relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20;
+  }
+
+  /* Documentation sidebar */
+  .docs-sidebar {
+    @apply hidden lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-gray-200 lg:bg-gray-50;
+  }
+
+  .docs-nav-item {
+    @apply block px-3 py-2 text-sm text-gray-700 rounded-md
+           transition-colors duration-200 ease-in-out
+           hover:text-primary-600 hover:bg-white;
+  }
+
+  .docs-nav-item.active {
+    @apply text-primary-600 bg-white font-medium shadow-sm;
+  }
+}
+
+/* Utility layer */
+@layer utilities {
+  /* Responsive spacing utilities */
+  .space-y-responsive > * + * {
+    @apply mt-4 sm:mt-6 lg:mt-8;
+  }
+
+  .space-x-responsive > * + * {
+    @apply ml-4 sm:ml-6 lg:ml-8;
+  }
+
+  /* Responsive padding utilities */
+  .p-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+
+  .px-responsive {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .py-responsive {
+    @apply py-4 sm:py-6 lg:py-8;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-in-out;
+  }
+
+  /* Focus utilities for accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  /* Print utilities */
+  .print-hidden {
+    @apply print:hidden;
+  }
+
+  .print-visible {
+    @apply hidden print:block;
+  }
+}
+
+/* Media queries for enhanced responsive design */
+@media (max-width: 640px) {
+  .hero-title {
+    @apply text-3xl leading-tight;
+  }
+  
+  .hero-subtitle {
+    @apply text-lg leading-relaxed;
+  }
+
+  .mobile-menu-button {
+    @apply block;
+  }
+
+  .desktop-menu {
+    @apply hidden;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-optimized {
+    @apply grid-cols-2 gap-6;
+  }
+}
+
+@media (min-width: 1025px) {
+  .desktop-optimized {
+    @apply grid-cols-3 gap-8;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    @apply hidden !important;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  .print-break-after {
+    page-break-after: always;
+  }
+  
+  .print-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    @apply border-2 border-primary-800;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-primary-800;
+  }
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode styles would be implemented here */
+  /* Currently keeping light mode only for consistency */
+}

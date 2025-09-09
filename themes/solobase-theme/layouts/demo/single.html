@@ -1,0 +1,385 @@
+{{ define "main" }}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Demo Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ .Title }}</h1>
+            <p class="text-xl text-gray-600">{{ .Description }}</p>
+        </header>
+
+        <!-- Guided Tour Toggle -->
+        <div class="mb-6 text-center">
+            <button id="toggle-tour" 
+                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Start Guided Tour
+            </button>
+        </div>
+        
+        <!-- Demo Container -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <!-- Enhanced Status Bar -->
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div id="demo-status" class="flex items-center space-x-2">
+                            <div id="status-indicator" class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                            <span id="status-text" class="text-sm font-medium text-gray-700">Initializing Demo...</span>
+                        </div>
+                        <!-- Progress Bar -->
+                        <div id="progress-container" class="hidden">
+                            <div class="w-32 bg-gray-200 rounded-full h-2">
+                                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <!-- Session Timer -->
+                        <div id="session-timer" class="hidden text-sm text-gray-500">
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span id="timer-text">30:00</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button id="refresh-demo" 
+                                class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="refreshDemo()" disabled>
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Refresh
+                        </button>
+                        <button id="restart-demo" 
+                                class="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="restartDemo()" disabled>
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Restart
+                        </button>
+                        <div class="relative">
+                            <button id="demo-menu" 
+                                    class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                                    onclick="toggleDemoMenu()">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                </svg>
+                            </button>
+                            <div id="demo-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                                <div class="py-1">
+                                    <button onclick="showDemoInfo()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Demo Information
+                                    </button>
+                                    <button onclick="showKeyboardShortcuts()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Keyboard Shortcuts
+                                    </button>
+                                    <button onclick="reportIssue()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Report Issue
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Demo Frame -->
+            <div class="relative" style="height: 700px;">
+                <!-- Loading State -->
+                <div id="demo-loading" class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                    <div class="text-center max-w-md">
+                        <div class="relative mb-6">
+                            <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Preparing Your Demo Environment</h3>
+                        <p id="loading-message" class="text-gray-600 mb-4">Initializing container...</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                            <div id="loading-progress" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-500">This usually takes 15-30 seconds</p>
+                        <div id="loading-steps" class="mt-4 text-left">
+                            <div class="flex items-center text-sm text-gray-600 mb-2">
+                                <div id="step-1-icon" class="w-4 h-4 mr-2 rounded-full bg-blue-600"></div>
+                                <span>Starting container...</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500 mb-2">
+                                <div id="step-2-icon" class="w-4 h-4 mr-2 rounded-full bg-gray-300"></div>
+                                <span>Loading application...</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <div id="step-3-icon" class="w-4 h-4 mr-2 rounded-full bg-gray-300"></div>
+                                <span>Preparing demo data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Frame -->
+                <iframe id="demo-frame" 
+                        class="w-full h-full border-0 hidden"
+                        src="about:blank"
+                        title="Solobase Demo"
+                        onload="handleFrameLoad()">
+                </iframe>
+
+                <!-- Error States -->
+                <div id="demo-error" class="absolute inset-0 flex items-center justify-center bg-red-50 hidden">
+                    <div class="text-center max-w-md">
+                        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">Demo Unavailable</h3>
+                        <p id="error-message" class="text-red-600 mb-4">The demo environment is temporarily unavailable. Please try again in a few minutes.</p>
+                        <div class="space-x-2">
+                            <button onclick="startDemo()" 
+                                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                                Try Again
+                            </button>
+                            <button onclick="reportIssue()" 
+                                    class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                                Report Issue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeout Warning -->
+                <div id="timeout-warning" class="absolute top-4 left-4 right-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded hidden">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                        <span id="timeout-message">Your demo session will expire in 5 minutes. Save any work you want to keep.</span>
+                        <button onclick="hideTimeoutWarning()" class="ml-auto">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Guided Tour Overlay -->
+        <div id="tour-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 id="tour-title" class="text-lg font-semibold text-gray-900">Welcome to Solobase Demo</h3>
+                            <button onclick="closeTour()" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="tour-content" class="mb-6">
+                            <p class="text-gray-600">This guided tour will help you explore the key features of Solobase. You can navigate through different sections and learn about the capabilities of this admin dashboard.</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span id="tour-step" class="text-sm text-gray-500">Step 1 of 5</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="tour-prev" onclick="previousTourStep()" 
+                                        class="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                                        disabled>
+                                    Previous
+                                </button>
+                                <button id="tour-next" onclick="nextTourStep()" 
+                                        class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-900">User Management</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Explore user accounts, roles, and permissions in the demo environment.</p>
+                <button onclick="navigateToSection('users')" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Try User Management →
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-900">Database Browser</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Browse database tables, execute queries, and explore data relationships.</p>
+                <button onclick="navigateToSection('database')" class="text-green-600 hover:text-green-800 font-medium">
+                    Explore Database →
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center mb-4">
+                    <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-900">File Storage</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Upload files, organize folders, and test storage management features.</p>
+                <button onclick="navigateToSection('storage')" class="text-purple-600 hover:text-purple-800 font-medium">
+                    Test File Storage →
+                </button>
+            </div>
+        </div>
+
+        <!-- Demo Information -->
+        <div class="prose prose-lg max-w-none">
+            {{ .Content }}
+        </div>
+    </div>
+</div>
+
+<!-- Load Demo Management Scripts -->
+<script src="{{ "js/demo-api.js" | relURL }}"></script>
+<script src="{{ "js/demo-manager.js" | relURL }}"></script>
+<script src="{{ "js/tour-manager.js" | relURL }}"></script>
+
+<script>
+// Initialize Demo and Tour Managers
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Demo Manager
+    window.demoManager = new DemoManager({
+        demoUrl: '{{ .Site.Params.demo_url | default "https://demo.solobase.dev" }}',
+        apiEndpoint: '/api/demo',
+        sessionDuration: 30 * 60, // 30 minutes
+        warningTime: 5 * 60, // 5 minutes warning
+        retryAttempts: 3,
+        retryDelay: 2000,
+        healthCheckInterval: 30000
+    });
+
+    // Initialize Tour Manager
+    window.tourManager = new TourManager({
+        autoStart: false, // Don't auto-start for demo
+        showProgress: true,
+        allowSkip: true
+    });
+
+    // Start the demo
+    window.demoManager.startDemo();
+
+    // Global event handlers for backward compatibility
+    window.refreshDemo = () => window.demoManager.refreshDemo();
+    window.restartDemo = () => window.demoManager.restartDemo();
+    window.toggleDemoMenu = () => window.demoManager.toggleDemoMenu();
+    window.showDemoInfo = () => window.demoManager.showDemoInfo();
+    window.showKeyboardShortcuts = () => window.demoManager.showKeyboardShortcuts();
+    window.reportIssue = () => window.demoManager.reportIssue();
+    window.hideTimeoutWarning = () => {
+        document.getElementById('timeout-warning')?.classList.add('hidden');
+    };
+    window.handleFrameLoad = () => {
+        console.log('Demo frame loaded successfully');
+    };
+
+    // Tour event handlers
+    window.startTour = () => window.tourManager.startTour();
+    window.closeTour = () => window.tourManager.closeTour();
+    window.nextTourStep = () => window.tourManager.nextStep();
+    window.previousTourStep = () => window.tourManager.previousStep();
+
+    // Navigation handlers
+    window.navigateToSection = (section) => {
+        if (window.demoManager.state.status === 'ready') {
+            const frame = document.getElementById('demo-frame');
+            frame?.focus();
+            window.demoManager.showNotification(`Navigating to ${section} section...`);
+        } else {
+            window.demoManager.showNotification('Please wait for the demo to load before navigating.');
+        }
+    };
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        const menu = document.getElementById('demo-menu');
+        const dropdown = document.getElementById('demo-menu-dropdown');
+        
+        if (menu && dropdown && !menu.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // Enhanced keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Demo shortcuts
+        if (e.ctrlKey && e.key === 'r' && !e.shiftKey) {
+            e.preventDefault();
+            window.demoManager.refreshDemo();
+        } else if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+            e.preventDefault();
+            window.demoManager.restartDemo();
+        }
+        
+        // Tour shortcuts are handled by TourManager
+        
+        // General shortcuts
+        if (e.key === 'Escape') {
+            // Close any open overlays
+            document.getElementById('timeout-warning')?.classList.add('hidden');
+            document.getElementById('demo-menu-dropdown')?.classList.add('hidden');
+        }
+        
+        // Help shortcut
+        if (e.key === 'F1' || (e.key === '?' && !e.ctrlKey && !e.altKey)) {
+            e.preventDefault();
+            window.tourManager.startTour();
+        }
+    });
+
+    // Demo session monitoring
+    window.demoManager.addEventListener('statusChange', (event) => {
+        console.log('Demo status changed:', event.detail);
+        
+        // Update page title based on status
+        const originalTitle = document.title;
+        switch (event.detail.status) {
+            case 'starting':
+                document.title = '⏳ Starting Demo - ' + originalTitle;
+                break;
+            case 'ready':
+                document.title = '✅ Demo Ready - ' + originalTitle;
+                break;
+            case 'error':
+                document.title = '❌ Demo Error - ' + originalTitle;
+                break;
+            case 'expired':
+                document.title = '⏰ Demo Expired - ' + originalTitle;
+                break;
+            default:
+                document.title = originalTitle;
+        }
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (window.demoManager) {
+            window.demoManager.destroy();
+        }
+    });
+});
+</script>
+{{ end }}

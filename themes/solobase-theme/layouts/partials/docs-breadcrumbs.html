@@ -1,0 +1,53 @@
+<!-- Breadcrumbs Navigation -->
+<nav class="flex mb-6" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <!-- Home -->
+        <li class="inline-flex items-center">
+            <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-9 9a1 1 0 001.414 1.414L2 12.414V15a1 1 0 001 1h3a1 1 0 001-1v-3a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 001 1h3a1 1 0 001-1v-2.586l.293.293a1 1 0 001.414-1.414l-9-9z"></path>
+                </svg>
+                Home
+            </a>
+        </li>
+        
+        <!-- Documentation -->
+        <li>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <a href="/docs/" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2">Documentation</a>
+            </div>
+        </li>
+        
+        <!-- Build breadcrumb path from URL -->
+        {{ $url := .RelPermalink }}
+        {{ $parts := split (trim $url "/") "/" }}
+        {{ $currentPath := "" }}
+        
+        {{ range $index, $part := $parts }}
+            {{ if gt $index 0 }} <!-- Skip "docs" part -->
+                {{ $currentPath = printf "%s/%s" $currentPath $part }}
+                {{ $isLast := eq $index (sub (len $parts) 1) }}
+                
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        {{ if $isLast }}
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2" aria-current="page">
+                                {{ humanize $part }}
+                            </span>
+                        {{ else }}
+                            <a href="/docs{{ $currentPath }}/" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2">
+                                {{ humanize $part }}
+                            </a>
+                        {{ end }}
+                    </div>
+                </li>
+            {{ end }}
+        {{ end }}
+    </ol>
+</nav>

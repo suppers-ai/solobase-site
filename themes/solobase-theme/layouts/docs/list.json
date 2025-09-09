@@ -1,0 +1,19 @@
+{{- $searchData := slice -}}
+{{- $allPages := where .Site.Pages "Section" "docs" -}}
+{{- range $allPages -}}
+  {{- if and (or (eq .Kind "page") (eq .Kind "section")) (ne .Title "Search Documentation") -}}
+    {{- $content := .Plain | htmlUnescape -}}
+    {{- $searchItem := dict 
+      "id" (.File.UniqueID | default .RelPermalink)
+      "title" .Title
+      "description" (.Description | default "")
+      "content" $content
+      "url" .RelPermalink
+      "section" .Section
+      "tags" (.Params.tags | default slice)
+      "weight" (.Params.weight | default 100)
+    -}}
+    {{- $searchData = $searchData | append $searchItem -}}
+  {{- end -}}
+{{- end -}}
+{{- $searchData | jsonify -}}

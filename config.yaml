@@ -1,0 +1,70 @@
+baseURL: 'https://solobase.dev'
+languageCode: 'en-us'
+title: 'Solobase - Modern Admin Dashboard'
+theme: 'solobase-theme'
+
+params:
+  description: 'A modern, full-featured admin dashboard built with Svelte and Go'
+  author: 'Solobase Team'
+  logo: '/images/solobase-logo.svg'
+  demo_url: 'https://solobase-demo.fly.dev/'
+  github_url: 'https://github.com/user/solobase'
+  
+menu:
+  main:
+    - name: 'Home'
+      url: '/'
+      weight: 10
+    - name: 'Documentation'
+      url: '/docs/'
+      weight: 20
+    - name: 'Live Demo'
+      url: 'https://solobase-demo.fly.dev/'
+      weight: 30
+    - name: 'GitHub'
+      url: 'https://github.com/user/solobase'
+      weight: 40
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    style: github
+    lineNos: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+# Build settings
+build:
+  writeStats: true
+  
+# Asset processing
+assets:
+  disableCSS: false
+  disableJS: false
+  
+# Image processing
+imaging:
+  resampleFilter: "CatmullRom"
+  quality: 85
+  anchor: "smart"
+  
+# Development server settings
+server:
+  headers:
+    - for: "/**"
+      values:
+        X-Frame-Options: "DENY"
+        X-XSS-Protection: "1; mode=block"
+        X-Content-Type-Options: "nosniff"
+        Referrer-Policy: "strict-origin-when-cross-origin"
+        Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'"
+
+# Output settings
+outputs:
+  home: ["HTML", "RSS"]
+  page: ["HTML"]
+  section: ["HTML", "RSS", "JSON"]

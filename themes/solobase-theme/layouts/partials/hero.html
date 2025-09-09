@@ -1,0 +1,263 @@
+<section class="min-h-screen flex items-center pb-20" style="background: linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%);">
+    <div class="container max-w-6xl mx-auto px-6 text-center">
+        <!-- Hero wrapper with do_not_touch.png -->
+        <div class="relative mx-auto" style="max-width: 1280px; width: 100%;">
+            <!-- Hero Image with Eyes -->
+            <div class="mb-8 relative inline-block">
+                <img src="/images/hero.png" alt="Solobase Dashboard" class="mx-auto rounded-lg shadow-lg hero-image" style="max-width: 400px; width: 100%; height: auto; position: relative;">
+                
+                <!-- Video overlay (hidden by default) -->
+                <video class="absolute top-0 left-0 rounded-lg shadow-lg" id="overlayVideo" style="max-width: 400px; width: 100%; height: 100%; object-fit: cover; display: none; z-index: 25;">
+                    <source src="/videos/video_1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                <!-- Eye containers - positioned absolutely over the image -->
+                <div class="absolute flex justify-center items-center" style="bottom: 28%; left: 52%; transform: translateX(-50%); gap: 12px; z-index: 20;">
+                    <!-- Left Eye -->
+                    <div class="eye-container" style="width: 24px; height: 24px; padding: 0px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="/images/eye.png" alt="Eye" class="eye-image" style="width: 12px; height: 12px; max-width: 12px; object-fit: contain; position: relative;">
+                    </div>
+                    
+                    <!-- Right Eye -->
+                    <div class="eye-container" style="width: 24px; height: 24px; padding: 0px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="/images/eye.png" alt="Eye" class="eye-image" style="width: 12px; height: 12px; max-width: 12px; object-fit: contain; position: relative;">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Do not touch image -->
+            <img src="/images/do_not_touch.png" alt="Do not touch" class="absolute do-not-touch-img" style="bottom: 40px; right: 0; width: 80px; height: auto; z-index: 15; cursor: pointer;">
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1f2937; font-family: 'Itim', cursive; letter-spacing: -0.02em;">
+            Solobase
+        </h1>
+        
+        <!-- Subtitle -->
+        <p class="text-xl md:text-2xl mb-12 max-w-2xl mx-auto" style="color: #6b7280; font-family: 'Itim', cursive;">
+            Open source backend, with authentication, storage, database, and extensions all built in one file.
+        </p>
+        
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ .Site.Params.demo_url | default "/demo/" }}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-medium text-white transition-all duration-200"
+               style="background: #06b6d4; font-family: 'Itim', cursive;">
+                Try Demo
+            </a>
+            <a href="/docs/" 
+               class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-medium transition-all duration-200"
+               style="border: 1px solid #06b6d4; color: #06b6d4; font-family: 'Itim', cursive;">
+                Read Docs
+            </a>
+        </div>
+        
+        <!-- Simple feature list -->
+        <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div class="text-center">
+                <div class="mb-3 flex justify-center">
+                    <i data-lucide="rocket" style="width: 32px; height: 32px; color: #06b6d4;"></i>
+                </div>
+                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Quick Setup</h3>
+                <p style="color: #6b7280; font-family: 'Itim', cursive;">Download and run. No dependencies.</p>
+            </div>
+            <div class="text-center">
+                <div class="mb-3 flex justify-center">
+                    <i data-lucide="lock" style="width: 32px; height: 32px; color: #06b6d4;"></i>
+                </div>
+                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Secure</h3>
+                <p style="color: #6b7280; font-family: 'Itim', cursive;">Built-in auth and security.</p>
+            </div>
+            <div class="text-center">
+                <div class="mb-3 flex justify-center">
+                    <i data-lucide="zap" style="width: 32px; height: 32px; color: #06b6d4;"></i>
+                </div>
+                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Fast</h3>
+                <p style="color: #6b7280; font-family: 'Itim', cursive;">Optimized Go backend.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@keyframes wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+}
+
+.do-not-touch-img {
+    transform-origin: center center;
+    transition: transform 0.2s ease;
+}
+
+.do-not-touch-img:hover {
+    animation: wobble 0.8s ease-in-out infinite;
+}
+</style>
+
+<script>
+(function() {
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+        
+        // Preload videos sequentially to prevent lag
+        const preloadVideos = function() {
+            const videoQueue = [];
+            for (let i = 1; i <= 6; i++) {
+                videoQueue.push(`/videos/video_${i}.mp4`);
+            }
+            
+            function preloadNext(index) {
+                if (index >= videoQueue.length) return;
+                
+                const video = document.createElement('video');
+                video.preload = 'auto';
+                video.style.display = 'none';
+                
+                video.addEventListener('canplaythrough', function() {
+                    console.log(`Video ${index + 1} preloaded`);
+                    // Preload next video after current one is ready
+                    setTimeout(() => preloadNext(index + 1), 100);
+                }, { once: true });
+                
+                video.addEventListener('error', function() {
+                    console.error(`Failed to preload video ${index + 1}`);
+                    // Continue with next video even if current one fails
+                    preloadNext(index + 1);
+                }, { once: true });
+                
+                const source = document.createElement('source');
+                source.src = videoQueue[index];
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                
+                // Start loading
+                video.load();
+            }
+            
+            // Start preloading the first video immediately
+            preloadNext(0);
+        };
+        
+        // Start preloading videos after page loads
+        preloadVideos();
+        
+        const eyes = document.querySelectorAll('.eye-image');
+        
+        // Track mouse movement with no delay
+        document.addEventListener('mousemove', function(e) {
+            requestAnimationFrame(function() {
+                eyes.forEach(function(eye) {
+                    const container = eye.parentElement;
+                    const containerRect = container.getBoundingClientRect();
+                    const eyeRect = eye.getBoundingClientRect();
+                    
+                    // Get container center (where eye starts)
+                    const containerCenterX = containerRect.left + containerRect.width / 2;
+                    const containerCenterY = containerRect.top + containerRect.height / 2;
+                    
+                    // Calculate vector from container center to mouse
+                    const deltaX = e.clientX - containerCenterX;
+                    const deltaY = e.clientY - containerCenterY;
+                    
+                    // Calculate angle to mouse
+                    const angle = Math.atan2(deltaY, deltaX);
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    
+                    // Maximum movement is half the container size minus half the eye size
+                    // This keeps the eye fully within the container
+                    const maxMoveX = (containerRect.width - eyeRect.width) / 2;
+                    const maxMoveY = (containerRect.height - eyeRect.height) / 2;
+                    
+                    // Scale movement based on distance (more distance = more movement)
+                    const movementScale = Math.min(distance / 200, 1);
+                    
+                    // Calculate final position
+                    const moveX = Math.cos(angle) * maxMoveX * movementScale;
+                    const moveY = Math.sin(angle) * maxMoveY * movementScale;
+                    
+                    // Apply transform immediately
+                    eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            });
+        });
+        
+        // Reset eyes when mouse leaves the window
+        document.addEventListener('mouseleave', function() {
+            eyes.forEach(function(eye) {
+                eye.style.transform = 'translate(0, 0)';
+            });
+        });
+        
+        // Handle do not touch click - cycle through videos
+        const doNotTouchImg = document.querySelector('.do-not-touch-img');
+        const overlayVideo = document.getElementById('overlayVideo');
+        const heroImage = document.querySelector('.hero-image');
+        let currentVideoIndex = 1;
+        let videoEndHandler = null;
+        let isVideoPlaying = false;
+        
+        if (doNotTouchImg && overlayVideo) {
+            doNotTouchImg.addEventListener('click', function() {
+                // Prevent clicking while video is playing
+                if (isVideoPlaying) return;
+                
+                // Disable the button while video plays
+                isVideoPlaying = true;
+                doNotTouchImg.style.pointerEvents = 'none';
+                doNotTouchImg.style.opacity = '0.5';
+                
+                // Update video source
+                overlayVideo.querySelector('source').src = `/videos/video_${currentVideoIndex}.mp4`;
+                overlayVideo.load(); // Reload video with new source
+                
+                // Show and play the video
+                overlayVideo.style.display = 'block';
+                overlayVideo.play();
+                
+                // Hide the hero image
+                heroImage.style.opacity = '0';
+                
+                // Remove previous end handler if exists
+                if (videoEndHandler) {
+                    overlayVideo.removeEventListener('ended', videoEndHandler);
+                }
+                
+                // Create new end handler based on current video
+                if (currentVideoIndex < 6) {
+                    // For videos 1-5, hide video and show hero image when ended
+                    videoEndHandler = function() {
+                        overlayVideo.style.display = 'none';
+                        heroImage.style.opacity = '1';
+                        overlayVideo.currentTime = 0;
+                        currentVideoIndex++; // Move to next video for next click
+                        
+                        // Re-enable the button
+                        isVideoPlaying = false;
+                        doNotTouchImg.style.pointerEvents = 'auto';
+                        doNotTouchImg.style.opacity = '1';
+                    };
+                } else {
+                    // For video 6, stay on the last frame and remove do not touch
+                    videoEndHandler = function() {
+                        overlayVideo.pause();
+                        // Remove the do not touch image completely
+                        doNotTouchImg.style.display = 'none';
+                    };
+                }
+                
+                overlayVideo.addEventListener('ended', videoEndHandler);
+            });
+        }
+    });
+})();
+</script>

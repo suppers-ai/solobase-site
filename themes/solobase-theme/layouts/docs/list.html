@@ -1,0 +1,126 @@
+{{ define "main" }}
+<div class="docs-content">
+    <!-- Section Header -->
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ .Title }}</h1>
+        {{ if .Description }}
+        <p class="text-xl text-gray-600 mb-4">{{ .Description }}</p>
+        {{ end }}
+    </header>
+    
+    <!-- Section Content -->
+    {{ if .Content }}
+    <div class="prose prose-lg max-w-none mb-12">
+        {{ .Content }}
+    </div>
+    {{ end }}
+    
+    <!-- Pages in this section -->
+    {{ if .Pages }}
+    <div class="space-y-6">
+        {{ range .Pages }}
+        <article class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                        <a href="{{ .Permalink }}" class="hover:text-blue-600">{{ .Title }}</a>
+                    </h2>
+                    
+                    {{ if .Description }}
+                    <p class="text-gray-600 mb-4">{{ .Description }}</p>
+                    {{ else if .Summary }}
+                    <p class="text-gray-600 mb-4">{{ .Summary }}</p>
+                    {{ end }}
+                    
+                    <!-- Page metadata -->
+                    <div class="flex items-center text-sm text-gray-500 space-x-4">
+                        {{ if .Date }}
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <time datetime="{{ .Date.Format "2006-01-02" }}">
+                                {{ .Date.Format "January 2, 2006" }}
+                            </time>
+                        </div>
+                        {{ end }}
+                        
+                        {{ if .ReadingTime }}
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>{{ .ReadingTime }} min read</span>
+                        </div>
+                        {{ end }}
+                        
+                        {{ if .Params.tags }}
+                        <div class="flex items-center space-x-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                            {{ range first 3 .Params.tags }}
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                {{ . }}
+                            </span>
+                            {{ end }}
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+                
+                <!-- Read more arrow -->
+                <div class="ml-4 flex-shrink-0">
+                    <a href="{{ .Permalink }}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {{ end }}
+    </div>
+    {{ end }}
+    
+    <!-- Subsections -->
+    {{ $subsections := where .Site.Pages "Section" .Section }}
+    {{ $subsections = where $subsections "Kind" "section" }}
+    {{ $subsections = where $subsections ".Parent" "eq" . }}
+    
+    {{ if $subsections }}
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Sections</h2>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {{ range $subsections }}
+            <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center mb-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            <a href="{{ .Permalink }}" class="hover:text-blue-600">{{ .Title }}</a>
+                        </h3>
+                    </div>
+                </div>
+                
+                {{ if .Description }}
+                <p class="text-gray-600 text-sm mb-3">{{ .Description }}</p>
+                {{ end }}
+                
+                <div class="text-sm text-gray-500">
+                    {{ $pageCount := len .Pages }}
+                    {{ $pageCount }} {{ if eq $pageCount 1 }}page{{ else }}pages{{ end }}
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
