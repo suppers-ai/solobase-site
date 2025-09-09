@@ -43,7 +43,7 @@
     {{ $options := (dict "targetPath" "css/main.css" "outputStyle" "compressed" "enableSourceMap" (not hugo.IsProduction)) }}
     {{ $style := resources.Get "css/main.css" | resources.PostCSS $options }}
     {{ if hugo.IsProduction }}
-        {{ $style = $style | resources.Minify | resources.Fingerprint }}
+        {{ $style = $style | resources.Fingerprint }}
     {{ end }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" {{ if hugo.IsProduction }}integrity="{{ $style.Data.Integrity }}"{{ end }}>
     <link rel="stylesheet" href="/css/minimalist.css">
@@ -88,7 +88,6 @@
     <!-- Scripts -->
     {{ $js := resources.Get "js/main.js" }}
     {{ if $js }}
-        {{ $js = $js | resources.Minify }}
         <script src="{{ $js.Permalink }}" defer></script>
     {{ end }}
     

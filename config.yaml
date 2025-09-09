@@ -41,6 +41,24 @@ markup:
 build:
   writeStats: true
   
+# Minification settings
+minify:
+  disableHTML: false
+  disableCSS: false
+  disableJS: true
+  disableJSON: false
+  disableSVG: false
+  disableXML: false
+  minifyOutput: false
+  tdewolff:
+    html:
+      keepWhitespace: false
+    css:
+      keepCSS2: true
+    js:
+      keepVarNames: true
+      noNullishOperator: true
+  
 # Asset processing
 assets:
   disableCSS: false
