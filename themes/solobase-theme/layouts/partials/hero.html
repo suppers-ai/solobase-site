@@ -71,9 +71,9 @@
         // Preload videos sequentially to prevent lag
         const preloadVideos = function() {
             const videoQueue = [];
-            const baseURL = {{ .Site.BaseURL | jsonify }};
+            const baseURL = '{{ .Site.BaseURL }}';
             for (let i = 1; i <= 6; i++) {
-                videoQueue.push(`${baseURL}videos/video_${i}.mp4`);
+                videoQueue.push(baseURL + 'videos/video_' + i + '.mp4');
             }
             
             function preloadNext(index) {
@@ -177,8 +177,8 @@
                 doNotTouchImg.style.opacity = '0.5';
                 
                 // Update video source
-                const baseURL = {{ .Site.BaseURL | jsonify }};
-                overlayVideo.querySelector('source').src = `${baseURL}videos/video_${currentVideoIndex}.mp4`;
+                const baseURL = '{{ .Site.BaseURL }}';
+                overlayVideo.querySelector('source').src = baseURL + 'videos/video_' + currentVideoIndex + '.mp4';
                 overlayVideo.load(); // Reload video with new source
                 
                 // Show and play the video

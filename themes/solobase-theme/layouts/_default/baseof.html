@@ -46,7 +46,7 @@
         {{ $style = $style | resources.Fingerprint }}
     {{ end }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" {{ if hugo.IsProduction }}integrity="{{ $style.Data.Integrity }}"{{ end }}>
-    <link rel="stylesheet" href="/css/minimalist.css">
+    <link rel="stylesheet" href="{{ "css/minimalist.css" | absURL }}">
     <style>
         /* Ensure Itim font is applied globally */
         * {
@@ -68,7 +68,7 @@
     <link rel="dns-prefetch" href="https://demo.solobase.dev">
     
     <!-- PWA manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{ "manifest.json" | absURL }}">
     
     <!-- Custom head content -->
     {{ block "head" . }}{{ end }}
@@ -92,7 +92,7 @@
     {{ end }}
     
     <!-- Service Worker Registration -->
-    <script src="/js/sw-register.js" defer></script>
+    <script src="{{ "js/sw-register.js" | absURL }}" defer></script>
     
     <!-- Initialize Lucide Icons -->
     <script>
