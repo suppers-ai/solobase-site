@@ -1,4 +1,4 @@
-<section class="min-h-screen flex items-center pb-20" style="background: linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%);">
+<section class="flex items-center" style="padding-bottom: 32px; background: linear-gradient(135deg, #ecfeff 0%, #ffffff 50%, #ecfeff 100%);">
     <div class="container max-w-6xl mx-auto px-6 text-center">
         <!-- Hero wrapper with do_not_touch.png -->
         <div class="relative mx-auto" style="max-width: 1280px; width: 100%;">
@@ -31,7 +31,7 @@
         </div>
         
         <!-- Title -->
-        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1f2937; font-family: 'Itim', cursive; letter-spacing: -0.02em;">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="margin-top: 0; color: #1f2937; font-family: 'Itim', cursive; letter-spacing: -0.02em;">
             Solobase
         </h1>
         
@@ -39,47 +39,6 @@
         <p class="text-xl md:text-2xl mb-12 max-w-2xl mx-auto" style="color: #6b7280; font-family: 'Itim', cursive;">
             Open source backend, with authentication, storage, database, and extensions all built in one file.
         </p>
-        
-        <!-- Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{{ .Site.Params.demo_url | default "/demo/" }}" 
-               target="_blank"
-               rel="noopener noreferrer"
-               class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-medium text-white transition-all duration-200"
-               style="background: #06b6d4; font-family: 'Itim', cursive;">
-                Try Demo
-            </a>
-            <a href="/docs/" 
-               class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-medium transition-all duration-200"
-               style="border: 1px solid #06b6d4; color: #06b6d4; font-family: 'Itim', cursive;">
-                Read Docs
-            </a>
-        </div>
-        
-        <!-- Simple feature list -->
-        <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div class="text-center">
-                <div class="mb-3 flex justify-center">
-                    <i data-lucide="rocket" style="width: 32px; height: 32px; color: #06b6d4;"></i>
-                </div>
-                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Quick Setup</h3>
-                <p style="color: #6b7280; font-family: 'Itim', cursive;">Download and run. No dependencies.</p>
-            </div>
-            <div class="text-center">
-                <div class="mb-3 flex justify-center">
-                    <i data-lucide="lock" style="width: 32px; height: 32px; color: #06b6d4;"></i>
-                </div>
-                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Secure</h3>
-                <p style="color: #6b7280; font-family: 'Itim', cursive;">Built-in auth and security.</p>
-            </div>
-            <div class="text-center">
-                <div class="mb-3 flex justify-center">
-                    <i data-lucide="zap" style="width: 32px; height: 32px; color: #06b6d4;"></i>
-                </div>
-                <h3 class="font-semibold mb-2" style="color: #1f2937; font-family: 'Itim', cursive;">Fast</h3>
-                <p style="color: #6b7280; font-family: 'Itim', cursive;">Optimized Go backend.</p>
-            </div>
-        </div>
     </div>
 </section>
 
