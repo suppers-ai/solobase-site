@@ -1,4 +1,4 @@
-baseURL: 'https://suppers-ai.github.io/solobase-site/'
+baseURL: 'https://solobase.dev/'
 languageCode: 'en-us'
 title: 'Solobase - Modern Admin Dashboard'
 theme: 'solobase-theme'
