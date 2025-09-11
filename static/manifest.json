@@ -1,7 +1,7 @@
 {
   "name": "Solobase - Modern Admin Dashboard",
   "short_name": "Solobase",
-  "description": "A modern, full-featured admin dashboard built with Svelte and Go",
+  "description": "Open source backend in a single binary",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

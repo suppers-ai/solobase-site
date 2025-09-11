@@ -4,11 +4,12 @@ title: 'Solobase - Modern Admin Dashboard'
 theme: 'solobase-theme'
 
 params:
-  description: 'A modern, full-featured admin dashboard built with Svelte and Go'
-  author: 'Solobase Team'
+  description: 'Open source backend in a single binary'
+  author: 'Suppers Software Limited'
   logo: '/images/solobase-logo.svg'
   demo_url: 'https://solobase-demo.fly.dev/'
-  github_url: 'https://github.com/user/solobase'
+  github_url: 'https://github.com/suppers-ai/solobase'
+  discord_url: 'https://discord.gg/jKqMcbrVzm'
   
 menu:
   main:
@@ -21,9 +22,12 @@ menu:
     - name: 'Live Demo'
       url: 'https://solobase-demo.fly.dev/'
       weight: 30
-    - name: 'GitHub'
-      url: 'https://github.com/user/solobase'
+    - name: 'Discord'
+      url: 'https://discord.gg/jKqMcbrVzm'
       weight: 40
+    - name: 'GitHub'
+      url: 'https://github.com/suppers-ai/solobase'
+      weight: 50
 
 markup:
   goldmark:
@@ -31,7 +35,7 @@ markup:
       unsafe: true
   highlight:
     style: github
-    lineNos: true
+    lineNos: false
   tableOfContents:
     startLevel: 2
     endLevel: 4

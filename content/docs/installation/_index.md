@@ -31,26 +31,26 @@ This script will:
 
 ### Download Pre-built Binaries
 
-Download the latest release for your platform from our [GitHub releases page](https://github.com/user/solobase/releases):
+Download the latest release for your platform from our [GitHub releases page](https://github.com/suppers-ai/solobase/releases):
 
 ```bash
 # Linux (x86_64)
-wget https://github.com/user/solobase/releases/latest/download/solobase-linux-amd64.tar.gz
+wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-linux-amd64.tar.gz
 tar -xzf solobase-linux-amd64.tar.gz
 sudo mv solobase /usr/local/bin/
 
 # macOS (Intel)
-wget https://github.com/user/solobase/releases/latest/download/solobase-darwin-amd64.tar.gz
+wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-darwin-amd64.tar.gz
 tar -xzf solobase-darwin-amd64.tar.gz
 sudo mv solobase /usr/local/bin/
 
 # macOS (Apple Silicon)
-wget https://github.com/user/solobase/releases/latest/download/solobase-darwin-arm64.tar.gz
+wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-darwin-arm64.tar.gz
 tar -xzf solobase-darwin-arm64.tar.gz
 sudo mv solobase /usr/local/bin/
 
 # Windows (PowerShell)
-Invoke-WebRequest -Uri "https://github.com/user/solobase/releases/latest/download/solobase-windows-amd64.zip" -OutFile "solobase.zip"
+Invoke-WebRequest -Uri "https://github.com/suppers-ai/solobase/releases/latest/download/solobase-windows-amd64.zip" -OutFile "solobase.zip"
 Expand-Archive -Path "solobase.zip" -DestinationPath "."
 Move-Item "solobase.exe" "C:\Program Files\solobase\"
 ```
@@ -155,7 +155,7 @@ If you prefer to build Solobase from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/user/solobase.git
+git clone https://github.com/suppers-ai/solobase.git
 cd solobase
 
 # Install dependencies
@@ -270,6 +270,5 @@ solobase serve --database-url "postgres://user:pass@localhost/solobase"
 If you encounter issues during installation:
 
 - Check our [Troubleshooting Guide](/docs/troubleshooting/)
-- Search existing [GitHub Issues](https://github.com/user/solobase/issues)
-- Join our [Community Discord](https://discord.gg/solobase)
-- Email support at [support@solobase.dev](mailto:support@solobase.dev)
+- Search existing [GitHub Issues](https://github.com/suppers-ai/solobase/issues)
+- Join our [Discord Community]({{ .Site.Params.discord_url }})

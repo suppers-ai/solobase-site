@@ -84,11 +84,11 @@ solobase serve
 You should see output like:
 
 ```
-🚀 Solobase v1.0.0 starting...
-📊 Database: SQLite (data/solobase.db)
-🔧 Admin panel: http://localhost:8080/admin
-🌐 Server running on http://localhost:8080
-✅ Ready to accept connections
+Solobase v1.0.0 starting...
+Database: SQLite (data/solobase.db)
+Admin panel: http://localhost:8080/admin
+Server running on http://localhost:8080
+Ready to accept connections
 ```
 
 ## Step 4: Access the Admin Dashboard
@@ -371,8 +371,7 @@ If you need help:
 
 - Check our [Documentation](/docs/)
 - Try the [Live Demo](/demo/)
-- Search [GitHub Issues](https://github.com/user/solobase/issues)
-- Join our [Community Discord](https://discord.gg/solobase)
-- Email [support@solobase.dev](mailto:support@solobase.dev)
+- Search [GitHub Issues](https://github.com/suppers-ai/solobase/issues)
+- Join our [Discord Community]({{ .Site.Params.discord_url }})
 
 Congratulations! You now have a fully functional Solobase instance. Explore the documentation to learn about advanced features and customization options.

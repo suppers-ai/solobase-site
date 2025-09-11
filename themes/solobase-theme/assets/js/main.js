@@ -226,11 +226,6 @@ function initSmoothScroll() {
 document.addEventListener('DOMContentLoaded', function() {
     initSmoothScroll();
     
-    // Initialize search functionality if on docs pages
-    if (document.getElementById('docs-search')) {
-        initDocsSearch();
-    }
-    
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
         const mobileMenu = document.getElementById('mobile-menu');

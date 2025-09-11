@@ -1,6 +1,6 @@
 name: "Solobase Theme"
 license: "MIT"
-licenselink: "https://github.com/user/solobase/blob/main/LICENSE"
+licenselink: "https://github.com/suppers-ai/solobase/blob/main/LICENSE"
 description: "A modern theme for the Solobase demo site"
 homepage: "https://solobase.dev"
 tags: ["responsive", "modern", "admin", "dashboard"]

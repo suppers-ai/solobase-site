@@ -26,7 +26,6 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ "favicon.ico" | absURL }}">
-    <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | absURL }}">
     <link rel="apple-touch-icon" href="{{ "favicon.ico" | absURL }}">
     
     <!-- Preconnect to external domains -->
@@ -76,6 +75,9 @@
 <body class="bg-gray-50 text-gray-900">
     <!-- Header -->
     {{ partial "header.html" . }}
+    
+    <!-- Hackathon Banner -->
+    {{ partial "hackathon-banner.html" . }}
     
     <!-- Main content -->
     <main>
