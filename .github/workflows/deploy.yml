@@ -68,7 +68,7 @@ jobs:
         run: |
           hugo \
             --gc \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "https://solobase.dev/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
