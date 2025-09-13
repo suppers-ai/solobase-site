@@ -1,49 +1,43 @@
-// Service Worker for Solobase
-const CACHE_NAME = 'solobase-v1';
-const urlsToCache = [
-  '/',
-  '/css/main.css',
-  '/css/minimalist.css',
-  '/js/main.js',
-  '/favicon.ico',
-  '/favicon.svg'
-];
+// Minimal Service Worker for Solobase - No caching
+// This service worker doesn't cache anything, just passes through all requests
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      }
-    )
-  );
+  // Skip waiting and activate immediately
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  // Clear all caches from previous service workers
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
+          return caches.delete(cacheName);
         })
       );
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim();
     })
   );
+});
+
+self.addEventListener('fetch', event => {
+  // For external resources (fonts, CDNs), use no-cors mode to bypass CSP in service worker
+  const url = new URL(event.request.url);
+  
+  // List of external domains that should bypass service worker
+  const externalDomains = [
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
+    'unpkg.com'
+  ];
+  
+  if (externalDomains.some(domain => url.hostname.includes(domain))) {
+    // Don't handle external requests in service worker, let browser handle them directly
+    return;
+  }
+  
+  // For same-origin requests, fetch normally
+  event.respondWith(fetch(event.request));
 });
