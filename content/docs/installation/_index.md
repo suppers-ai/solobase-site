@@ -7,151 +7,171 @@ tags: ["installation", "setup", "getting-started"]
 
 # Installing Solobase
 
-Solobase can be installed in several ways depending on your needs and environment. Choose the method that works best for your setup.
+Solobase is a Go package that you can integrate into your applications. It provides a complete backend solution with authentication, database management, and admin interface.
 
-## Quick Install (Recommended)
+## Quick Install
 
-The fastest way to get started with Solobase is using our installation script:
-
-```bash
-# Download and run the installation script
-curl -fsSL https://get.solobase.dev | bash
-
-# Or with wget
-wget -qO- https://get.solobase.dev | bash
-```
-
-This script will:
-- Detect your operating system and architecture
-- Download the appropriate binary
-- Install it to `/usr/local/bin/solobase`
-- Set up basic configuration
-
-## Manual Installation
-
-### Download Pre-built Binaries
-
-Download the latest release for your platform from our [GitHub releases page](https://github.com/suppers-ai/solobase/releases):
+The fastest way to get started with Solobase is using Go:
 
 ```bash
-# Linux (x86_64)
-wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-linux-amd64.tar.gz
-tar -xzf solobase-linux-amd64.tar.gz
-sudo mv solobase /usr/local/bin/
+# Install Go if you haven't already
+# Visit https://go.dev/dl/ for installation instructions
 
-# macOS (Intel)
-wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-darwin-amd64.tar.gz
-tar -xzf solobase-darwin-amd64.tar.gz
-sudo mv solobase /usr/local/bin/
+# Create your project
+mkdir my-app && cd my-app
+go mod init my-app
 
-# macOS (Apple Silicon)
-wget https://github.com/suppers-ai/solobase/releases/latest/download/solobase-darwin-arm64.tar.gz
-tar -xzf solobase-darwin-arm64.tar.gz
-sudo mv solobase /usr/local/bin/
-
-# Windows (PowerShell)
-Invoke-WebRequest -Uri "https://github.com/suppers-ai/solobase/releases/latest/download/solobase-windows-amd64.zip" -OutFile "solobase.zip"
-Expand-Archive -Path "solobase.zip" -DestinationPath "."
-Move-Item "solobase.exe" "C:\Program Files\solobase\"
+# Get Solobase
+go get github.com/suppers-ai/solobase
 ```
 
-### Using Package Managers
+## Creating Your First Application
 
-#### Homebrew (macOS/Linux)
+Create a simple Solobase application:
+
+```go
+// main.go
+package main
+
+import (
+    "log"
+    "github.com/suppers-ai/solobase"
+)
+
+func main() {
+    // Create a new Solobase app
+    app := solobase.New()
+
+    // Initialize and start
+    if err := app.Initialize(); err != nil {
+        log.Fatal(err)
+    }
+
+    if err := app.Start(); err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+Run your application:
 
 ```bash
-# Add our tap
-brew tap solobase/tap
-
-# Install Solobase
-brew install solobase
+go run main.go
 ```
 
-#### Snap (Linux)
+## Installation Requirements
+
+### System Requirements
+
+- **Go**: Version 1.21 or later
+- **Operating System**: Linux, macOS, or Windows
+- **Database**: SQLite (built-in), PostgreSQL, or MySQL
+- **Memory**: Minimum 512MB RAM
+- **Disk**: Minimum 100MB free space
+
+### Installing Go
+
+If you don't have Go installed, follow the official installation guide:
+
+**[📦 Install Go](https://go.dev/doc/install)**
+
+The official guide provides:
+- Download links for all platforms
+- Step-by-step installation instructions
+- Verification steps
+- Environment setup
+
+After installation, verify Go is installed correctly:
 
 ```bash
-# Install from Snap Store
-sudo snap install solobase
-
-# Enable necessary permissions
-sudo snap connect solobase:network
-sudo snap connect solobase:home
+go version
 ```
 
-#### Chocolatey (Windows)
-
-```powershell
-# Install using Chocolatey
-choco install solobase
-```
-
-## Docker Installation
-
-Run Solobase using Docker without installing it locally:
-
+You should see output like:
 ```bash
-# Pull the latest image
-docker pull solobase/solobase:latest
-
-# Run with default settings
-docker run -d \
-  --name solobase \
-  -p 8080:8080 \
-  -v solobase_data:/app/data \
-  solobase/solobase:latest
-
-# Run with custom configuration
-docker run -d \
-  --name solobase \
-  -p 8080:8080 \
-  -v $(pwd)/config:/app/config \
-  -v solobase_data:/app/data \
-  -e DATABASE_URL="sqlite:///app/data/solobase.db" \
-  solobase/solobase:latest
+go version go1.21.0 linux/amd64
 ```
 
-### Docker Compose
+## Advanced Installation Options
 
-Create a `docker-compose.yml` file:
+### With Custom Configuration
 
-```yaml
-version: '3.8'
+```go
+package main
 
-services:
-  solobase:
-    image: solobase/solobase:latest
-    ports:
-      - "8080:8080"
-    environment:
-      - DATABASE_URL=sqlite:///app/data/solobase.db
-      - ADMIN_EMAIL=admin@example.com
-      - ADMIN_PASSWORD=changeme123
-    volumes:
-      - solobase_data:/app/data
-      - ./config:/app/config
-    restart: unless-stopped
+import (
+    "log"
+    "os"
+    "github.com/suppers-ai/solobase"
+)
 
-volumes:
-  solobase_data:
+func main() {
+    app := solobase.NewWithOptions(solobase.Options{
+        DatabaseType:         "postgres",
+        DatabaseURL:         os.Getenv("DATABASE_URL"),
+        StorageType:         "s3",
+        S3Config: &solobase.S3Config{
+            Bucket:          os.Getenv("S3_BUCKET"),
+            Region:          os.Getenv("AWS_REGION"),
+            AccessKeyID:     os.Getenv("AWS_ACCESS_KEY_ID"),
+            SecretAccessKey: os.Getenv("AWS_SECRET_ACCESS_KEY"),
+        },
+        DefaultAdminEmail:    os.Getenv("ADMIN_EMAIL"),
+        DefaultAdminPassword: os.Getenv("ADMIN_PASSWORD"),
+        JWTSecret:           os.Getenv("JWT_SECRET"),
+        Port:                os.Getenv("PORT"),
+    })
+
+    if err := app.Initialize(); err != nil {
+        log.Fatal("Failed to initialize:", err)
+    }
+
+    if err := app.Start(); err != nil {
+        log.Fatal("Failed to start:", err)
+    }
+}
 ```
 
-Then run:
+### With Extensions
 
-```bash
-docker-compose up -d
+```go
+package main
+
+import (
+    "log"
+    "github.com/suppers-ai/solobase"
+    "github.com/suppers-ai/solobase/extensions/official/webhooks"
+    "github.com/suppers-ai/solobase/extensions/official/analytics"
+)
+
+func main() {
+    app := solobase.New()
+
+    // Register extensions
+    app.RegisterExtension(webhooks.New())
+    app.RegisterExtension(analytics.New())
+
+    if err := app.Initialize(); err != nil {
+        log.Fatal(err)
+    }
+
+    if err := app.Start(); err != nil {
+        log.Fatal(err)
+    }
+}
 ```
 
 ## Building from Source
 
-If you prefer to build Solobase from source:
+If you want to contribute or customize Solobase:
 
 ### Prerequisites
 
 - Go 1.21 or later
-- Node.js 18 or later
 - Git
+- Make (optional)
 
-### Build Steps
+### Clone and Build
 
 ```bash
 # Clone the repository
@@ -160,44 +180,49 @@ cd solobase
 
 # Install dependencies
 go mod download
-npm install
 
-# Build the frontend
-npm run build
-
-# Build the binary
+# Build the project
 go build -o solobase ./cmd/solobase
 
-# Install globally (optional)
-sudo mv solobase /usr/local/bin/
+# Or use the build script
+./compile.sh
+
+# Run the built binary
+./solobase
+```
+
+### Development Mode
+
+For development with hot reload:
+
+```bash
+# Install air for hot reload
+go install github.com/air-verse/air@latest
+
+# Run in development mode
+air
 ```
 
 ## Verification
 
-After installation, verify that Solobase is working correctly:
+After creating your application, verify it works:
 
 ```bash
-# Check version
-solobase version
-
-# Check help
-solobase --help
-
-# Initialize a new instance
-solobase init
-
-# Start the server
-solobase serve
+# Run your application
+go run main.go
 ```
 
 You should see output similar to:
 
+```bash
+2024/01/15 14:30:00 Initializing Solobase...
+2024/01/15 14:30:00 Database connected: SQLite
+2024/01/15 14:30:00 Admin user created: admin@example.com
+2024/01/15 14:30:00 Server starting on :8080
+2024/01/15 14:30:00 Admin panel: http://localhost:8080/admin
 ```
-Solobase v1.0.0
-Starting server on http://localhost:8080
-Database: SQLite (/home/user/.solobase/solobase.db)
-Admin panel: http://localhost:8080/admin
-```
+
+Visit http://localhost:8080/admin to access the admin panel.
 
 ## Next Steps
 
@@ -209,61 +234,94 @@ Now that Solobase is installed:
 
 ## Troubleshooting
 
-### Permission Denied
+### Module Download Issues
 
-If you get permission errors on Linux/macOS:
+If you have problems downloading the module:
 
 ```bash
-# Make the binary executable
-chmod +x solobase
+# Clear module cache
+go clean -modcache
 
-# Or install with sudo
-sudo mv solobase /usr/local/bin/
+# Set Go proxy (if behind firewall)
+export GOPROXY=https://proxy.golang.org,direct
+
+# Try again
+go get github.com/suppers-ai/solobase
 ```
 
 ### Port Already in Use
 
 If port 8080 is already in use:
 
-```bash
-# Use a different port
-solobase serve --port 8081
+```go
+// Use a different port in your code
+app := solobase.NewWithOptions(solobase.Options{
+    Port: "8081",
+    // ... other options
+})
 
-# Or set via environment variable
-export PORT=8081
-solobase serve
+// Or use environment variable
+app := solobase.NewWithOptions(solobase.Options{
+    Port: os.Getenv("PORT"),
+    // ... other options
+})
 ```
 
 ### Database Connection Issues
 
 For database connection problems:
 
-```bash
-# Check database permissions
-ls -la ~/.solobase/
+```go
+// SQLite (default)
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseType: "sqlite",
+    DatabaseURL: "sqlite:///path/to/database.db",
+})
 
-# Reset database (WARNING: This will delete all data)
-solobase reset --confirm
+// PostgreSQL
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseType: "postgres",
+    DatabaseURL: "postgres://user:password@localhost/dbname?sslmode=disable",
+})
 
-# Use a different database
-solobase serve --database-url "postgres://user:pass@localhost/solobase"
+// MySQL
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseType: "mysql",
+    DatabaseURL: "user:password@tcp(localhost:3306)/dbname?parseTime=true",
+})
 ```
 
-## System Requirements
+## Docker Deployment
 
-### Minimum Requirements
+You can also containerize your Solobase application:
 
-- **CPU**: 1 core, 1 GHz
-- **RAM**: 512 MB
-- **Storage**: 100 MB free space
-- **OS**: Linux, macOS, or Windows
+```dockerfile
+# Dockerfile
+FROM golang:1.21-alpine AS builder
 
-### Recommended Requirements
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 
-- **CPU**: 2+ cores, 2+ GHz
-- **RAM**: 2+ GB
-- **Storage**: 1+ GB free space
-- **OS**: Recent version of Linux, macOS, or Windows
+COPY . .
+RUN go build -o solobase-app main.go
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+
+COPY --from=builder /app/solobase-app .
+
+EXPOSE 8080
+CMD ["./solobase-app"]
+```
+
+Build and run:
+
+```bash
+docker build -t my-solobase-app .
+docker run -p 8080:8080 my-solobase-app
+```
 
 ## Support
 
@@ -271,4 +329,4 @@ If you encounter issues during installation:
 
 - Check our [Troubleshooting Guide](/docs/troubleshooting/)
 - Search existing [GitHub Issues](https://github.com/suppers-ai/solobase/issues)
-- Join our [Discord Community]({{ .Site.Params.discord_url }})
+- Join our [Discord Community](https://discord.gg/jKqMcbrVzm)

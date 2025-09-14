@@ -12,86 +12,121 @@ This guide will help you get Solobase up and running in just a few minutes. By t
 ## Prerequisites
 
 Before starting, make sure you have:
-- Solobase installed ([Installation Guide](/docs/installation/))
+- Go 1.21 or later installed ([Download Go](https://go.dev/dl/))
 - A terminal or command prompt
 - A web browser
 
-## Step 1: Initialize Your Project
+## Step 1: Create Your Solobase Application
 
-Create a new directory for your Solobase project and initialize it:
+Create a new Go module for your Solobase project:
 
 ```bash
 # Create project directory
-mkdir my-solobase-project
-cd my-solobase-project
+mkdir my-solobase-app
+cd my-solobase-app
 
-# Initialize Solobase
-solobase init
+# Initialize Go module
+go mod init my-solobase-app
+
+# Get Solobase package
+go get github.com/suppers-ai/solobase
 ```
 
-This creates the following structure:
+## Step 2: Create Your Application
 
+Create a `main.go` file with your Solobase application:
+
+```go
+package main
+
+import (
+    "log"
+    "github.com/suppers-ai/solobase"
+)
+
+func main() {
+    // Create a new Solobase app with options
+    app := solobase.NewWithOptions(solobase.Options{
+        DatabaseType: "sqlite",
+        DatabaseURL: "sqlite:///data/solobase.db",
+        DefaultAdminEmail: "admin@example.com",
+        DefaultAdminPassword: "changeme123", // Change this!
+        JWTSecret: "your-secret-key-here", // Generate a secure key
+        Port: "8080",
+    })
+
+    // Initialize the application
+    if err := app.Initialize(); err != nil {
+        log.Fatal("Failed to initialize app:", err)
+    }
+
+    // Start the server
+    log.Println("Starting Solobase on http://localhost:8080")
+    if err := app.Start(); err != nil {
+        log.Fatal("Failed to start app:", err)
+    }
+}
 ```
-my-solobase-project/
-├── config.yaml          # Configuration file
-├── data/                 # Database and storage directory
-│   └── solobase.db      # SQLite database (created on first run)
-└── storage/             # File storage directory
+
+## Step 3: Advanced Configuration (Optional)
+
+For more advanced configuration, you can use environment variables or a config file:
+
+```go
+// Using environment variables
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseURL: os.Getenv("DATABASE_URL"),
+    JWTSecret: os.Getenv("JWT_SECRET"),
+    Port: os.Getenv("PORT"),
+})
 ```
 
-## Step 2: Configure Your Instance
+Or create a more complex application with hooks:
 
-Edit the generated `config.yaml` file:
+```go
+app := solobase.New()
 
-```yaml
-# config.yaml
-server:
-  port: 8080
-  host: "localhost"
+// Add custom middleware
+app.OnServe(func(e *solobase.ServeEvent) error {
+    e.Router.Use(customMiddleware)
+    return e.Next()
+})
 
-database:
-  url: "sqlite:///data/solobase.db"
+// Add API hooks
+app.OnBeforeAPI("/api/users/*", func(e *solobase.APIEvent) error {
+    log.Printf("User API accessed: %s", e.Request.URL.Path)
+    return e.Next()
+})
 
-admin:
-  email: "admin@example.com"
-  password: "changeme123"  # Change this!
+## Step 4: Build and Run Your Application
 
-auth:
-  jwt_secret: "your-secret-key-here"  # Generate a secure key
-  session_secret: "your-session-key"
-
-storage:
-  provider: "local"
-  path: "./storage"
-```
-
-**Important**: Change the default admin password and generate secure secrets:
+Build and run your Solobase application:
 
 ```bash
-# Generate secure secrets
-solobase generate-secret --jwt
-solobase generate-secret --session
+# Build the application
+go build -o solobase-app
+
+# Run the application
+./solobase-app
 ```
 
-## Step 3: Start the Server
-
-Start your Solobase instance:
+Or run directly:
 
 ```bash
-solobase serve
+go run main.go
 ```
 
 You should see output like:
 
-```
-Solobase v1.0.0 starting...
-Database: SQLite (data/solobase.db)
-Admin panel: http://localhost:8080/admin
-Server running on http://localhost:8080
-Ready to accept connections
+```bash
+2024/01/15 14:30:00 Starting Solobase on http://localhost:8080
+2024/01/15 14:30:00 Database initialized: SQLite
+2024/01/15 14:30:00 Admin user created: admin@example.com
+2024/01/15 14:30:00 Server ready at http://localhost:8080
+2024/01/15 14:30:00 Admin panel available at http://localhost:8080/admin
 ```
 
-## Step 4: Access the Admin Dashboard
+## Step 5: Access the Admin Dashboard
 
 Open your web browser and navigate to [http://localhost:8080/admin](http://localhost:8080/admin).
 
@@ -99,7 +134,7 @@ Log in with your admin credentials:
 - **Email**: `admin@example.com`
 - **Password**: `changeme123` (or whatever you set)
 
-## Step 5: Explore the Dashboard
+## Step 6: Explore the Dashboard
 
 Once logged in, you'll see the main dashboard with several sections:
 
@@ -123,7 +158,7 @@ Once logged in, you'll see the main dashboard with several sections:
 - Organize files in folders
 - Set access permissions
 
-## Step 6: Create Your First User
+## Step 7: Create Your First User
 
 Let's create a new user through the admin interface:
 
@@ -138,7 +173,7 @@ Let's create a new user through the admin interface:
    ```
 4. Click **Create User**
 
-## Step 7: Set Up a Database Table
+## Step 8: Set Up a Database Table
 
 Create a simple table to store some data:
 
@@ -156,7 +191,7 @@ Create a simple table to store some data:
    ```
 4. Click **Execute**
 
-## Step 8: Add Some Data
+## Step 9: Add Some Data
 
 Add sample data to your new table:
 
@@ -172,7 +207,7 @@ Add sample data to your new table:
 
 Repeat this process to add a few more products.
 
-## Step 9: Upload Files
+## Step 10: Upload Files
 
 Test the file storage functionality:
 
@@ -181,7 +216,7 @@ Test the file storage functionality:
 3. Select some files from your computer
 4. Organize them into folders if desired
 
-## Step 10: Explore the API
+## Step 11: Explore the API
 
 Solobase provides a REST API for all functionality. Test it using curl:
 
@@ -213,20 +248,29 @@ curl -X POST \
 
 Now that you have Solobase running, here are some common next steps:
 
-### 1. Customize the Dashboard
+### 1. Add Extensions
 
-Create custom dashboard widgets:
+Enhance your application with extensions:
 
-```yaml
-# Add to config.yaml
-dashboard:
-  widgets:
-    - type: "chart"
-      title: "Sales Over Time"
-      query: "SELECT DATE(created_at) as date, SUM(price) as total FROM products GROUP BY DATE(created_at)"
-    - type: "stat"
-      title: "Total Products"
-      query: "SELECT COUNT(*) FROM products"
+```go
+package main
+
+import (
+    "github.com/suppers-ai/solobase"
+    "github.com/suppers-ai/solobase/extensions/official/webhooks"
+    "github.com/suppers-ai/solobase/extensions/official/analytics"
+)
+
+func main() {
+    app := solobase.New()
+
+    // Register extensions
+    app.RegisterExtension(webhooks.New())
+    app.RegisterExtension(analytics.New())
+
+    app.Initialize()
+    app.Start()
+}
 ```
 
 ### 2. Set Up User Roles
@@ -305,19 +349,19 @@ backup:
 
 ## Troubleshooting
 
-### Server Won't Start
+### Build Errors
 
-If the server fails to start:
+If you encounter build errors:
 
 ```bash
-# Check the configuration
-solobase validate-config
+# Update dependencies
+go mod tidy
 
-# Check database connectivity
-solobase check-db
+# Clear module cache if needed
+go clean -modcache
 
-# View detailed logs
-solobase serve --log-level debug
+# Verify Go version
+go version  # Should be 1.21 or later
 ```
 
 ### Can't Access Admin Panel
@@ -333,15 +377,20 @@ If you can't access the admin panel:
 
 For database problems:
 
-```bash
-# Reset the database (WARNING: This deletes all data)
-solobase reset-db --confirm
+```go
+// Use PostgreSQL instead of SQLite
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseType: "postgres",
+    DatabaseURL: "postgres://user:pass@localhost/solobase",
+    // ... other options
+})
 
-# Check database permissions
-ls -la data/
-
-# Try a different database URL
-solobase serve --database-url "sqlite:///test.db"
+// Or MySQL
+app := solobase.NewWithOptions(solobase.Options{
+    DatabaseType: "mysql",
+    DatabaseURL: "mysql://user:pass@localhost/solobase",
+    // ... other options
+})
 ```
 
 ## Production Deployment
@@ -372,6 +421,6 @@ If you need help:
 - Check our [Documentation](/docs/)
 - Try the [Live Demo](/demo/)
 - Search [GitHub Issues](https://github.com/suppers-ai/solobase/issues)
-- Join our [Discord Community]({{ .Site.Params.discord_url }})
+- Join our [Discord Community](https://discord.gg/jKqMcbrVzm)
 
 Congratulations! You now have a fully functional Solobase instance. Explore the documentation to learn about advanced features and customization options.

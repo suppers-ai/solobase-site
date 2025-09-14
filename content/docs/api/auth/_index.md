@@ -415,7 +415,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 JWT tokens contain three parts separated by dots:
 
-```
+```text
 header.payload.signature
 ```
 
@@ -478,7 +478,41 @@ X-RateLimit-Reset: 1642252200
 
 ## SDK Examples
 
-### JavaScript/TypeScript
+### Go SDK
+
+When using Solobase in your Go application, authentication is handled automatically:
+
+```go
+package main
+
+import (
+    "github.com/suppers-ai/solobase"
+)
+
+func main() {
+    app := solobase.NewWithOptions(solobase.Options{
+        DefaultAdminEmail: "admin@example.com",
+        DefaultAdminPassword: "secure-password",
+        JWTSecret: "your-secret-key",
+    })
+
+    // Add custom authentication hooks
+    app.OnBeforeAPI("/api/auth/login", func(e *solobase.APIEvent) error {
+        // Custom logic before login
+        return e.Next()
+    })
+
+    app.OnAfterAPI("/api/auth/login", func(e *solobase.APIEvent) error {
+        // Custom logic after successful login
+        return e.Next()
+    })
+
+    app.Initialize()
+    app.Start()
+}
+```
+
+### JavaScript/TypeScript Client
 
 ```typescript
 class SolobaseAuth {

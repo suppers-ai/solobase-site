@@ -99,7 +99,7 @@ If you're impressed with the demo, here's how to get started:
 
 1. **[Installation Guide](/docs/installation/)** - Step-by-step setup instructions
 2. **[Configuration](/docs/configuration/)** - Customize Solobase for your needs
-3. **[GitHub Repository]({{ .Site.Params.github_url }})** - Download the latest release
+3. **[GitHub Repository](https://github.com/suppers-ai/solobase)** - Download the latest release
 4. **[Documentation](/docs/)** - Complete feature documentation
 
 ### Need Support?

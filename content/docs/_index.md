@@ -44,4 +44,4 @@ Visit `http://localhost:8080` to access your dashboard.
 
 ## Support
 
-[GitHub Issues]({{ .Site.Params.github_url }}/issues) • [Live Demo]({{ .Site.Params.demo_url }}) • [Discord Community]({{ .Site.Params.discord_url }})
+[GitHub Issues](https://github.com/suppers-ai/solobase/issues) • [Live Demo](https://solobase-demo.fly.dev/) • [Discord Community](https://discord.gg/jKqMcbrVzm)

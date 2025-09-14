@@ -11,7 +11,7 @@ The Database API provides endpoints for performing CRUD operations, executing qu
 
 ## Base URL
 
-```
+```text
 https://your-solobase-instance.com/api/database
 ```
 

@@ -34,8 +34,10 @@ markup:
     renderer:
       unsafe: true
   highlight:
-    style: github
+    noClasses: false
     lineNos: false
+    codeFences: true
+    guessSyntax: true
   tableOfContents:
     startLevel: 2
     endLevel: 4

@@ -29,14 +29,20 @@
     
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+
     {{ $style := resources.Get "css/main.css" }}
     {{ if $style }}
         <link rel="stylesheet" href="{{ $style.Permalink }}">
     {{ end }}
-    
+
     <!-- Custom head content -->
     {{ block "head" . }}{{ end }}
+
+    <!-- Syntax highlighting - loaded last to override any other styles -->
+    {{ $syntaxStyle := resources.Get "css/syntax.css" }}
+    {{ if $syntaxStyle }}
+        <link rel="stylesheet" href="{{ $syntaxStyle.Permalink }}">
+    {{ end }}
     
     <style>
         /* Apply Itim font */
@@ -85,33 +91,7 @@
             font-family: 'Itim', cursive;
         }
         
-        /* Improved code blocks */
-        .highlight, pre {
-            position: relative !important;
-            background: #1e1e1e !important;
-            border-radius: 0.375rem !important;
-            padding: 0 !important;
-            margin: 1.5rem 0 !important;
-            overflow: hidden !important;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace !important;
-            font-size: 0.875rem !important;
-            line-height: 1.4 !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        
-        pre code {
-            background: transparent !important;
-            padding: 0.875rem 1rem !important;
-            padding-right: 3rem !important;
-            color: #d4d4d4 !important;
-            font-family: inherit !important;
-            display: block !important;
-            font-size: 0.875rem !important;
-            overflow-x: auto !important;
-            line-height: inherit !important;
-            white-space: pre !important;
-        }
+        /* Code blocks are now styled in syntax.css */
         
         /* Hide ALL line numbers - they shouldn't be in code examples */
         .highlight .ln,
@@ -130,116 +110,9 @@
             padding-left: 0 !important;
         }
         
-        /* Better syntax highlighting for dark theme */
-        pre code .comment,
-        .highlight .c,
-        .highlight .c1 {
-            color: #608b4e !important;
-            font-style: italic;
-        }
+        /* Syntax highlighting is now in syntax.css */
         
-        pre code .keyword,
-        .highlight .k,
-        .highlight .kd,
-        .highlight .kn,
-        .highlight .kp,
-        .highlight .kr,
-        .highlight .kt {
-            color: #569cd6 !important;
-        }
-        
-        pre code .string,
-        .highlight .s,
-        .highlight .s1,
-        .highlight .s2,
-        .highlight .sr {
-            color: #ce9178 !important;
-        }
-        
-        pre code .number,
-        .highlight .m,
-        .highlight .mi,
-        .highlight .mf {
-            color: #b5cea8 !important;
-        }
-        
-        pre code .function,
-        .highlight .nf,
-        .highlight .nx {
-            color: #dcdcaa !important;
-        }
-        
-        /* Property names, keys */
-        .highlight .na,
-        .highlight .nt,
-        .highlight .nl {
-            color: #9cdcfe !important;
-        }
-        
-        /* Values, constants */
-        .highlight .kc,
-        .highlight .bp {
-            color: #569cd6 !important;
-        }
-        
-        /* Punctuation, operators */
-        .highlight .p,
-        .highlight .o {
-            color: #d4d4d4 !important;
-        }
-        
-        /* Inline code */
-        code:not(pre code) {
-            background: #f3f4f6;
-            padding: 0.2rem 0.4rem;
-            border-radius: 0.25rem;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.875em;
-            color: #1f2937;
-        }
-        
-        /* Code comments */
-        .token.comment {
-            color: #6a9955 !important;
-            font-style: italic;
-        }
-        
-        /* Language label for code blocks */
-        pre[class*="language-"]::before {
-            content: attr(data-language);
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            padding: 0.125rem 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: #888;
-            font-size: 0.75rem;
-            border-radius: 0.25rem;
-            font-family: 'Itim', cursive;
-        }
-        
-        /* Ensure code blocks have relative positioning for language labels */
-        pre[class*="language-"] {
-            position: relative;
-        }
-        
-        /* Better bash/shell styling */
-        .language-bash .token.comment,
-        .language-shell .token.comment {
-            color: #7c7c7c !important;
-        }
-        
-        .language-bash .token.string,
-        .language-shell .token.string {
-            color: #9ecbff !important;
-        }
-        
-        .language-bash .token.keyword,
-        .language-shell .token.keyword,
-        .language-bash .token.builtin,
-        .language-shell .token.builtin {
-            color: #f97583 !important;
-        }
+        /* All code styling moved to syntax.css for consistency */
         
         /* Improved paragraph spacing */
         .docs-content p {
@@ -448,7 +321,9 @@
             });
         });
     </script>
-    
+
+    <!-- Hugo's Chroma syntax highlighting is now handled via CSS classes -->
+
     <!-- Custom scripts -->
     {{ block "scripts" . }}{{ end }}
 </body>

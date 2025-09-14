@@ -49,7 +49,7 @@ File and media management:
 
 ### System Health
 Monitor your Solobase instance:
-```
+```text
 CPU Usage: 45%
 Memory Usage: 2.1GB / 4GB
 Disk Usage: 15GB / 100GB
