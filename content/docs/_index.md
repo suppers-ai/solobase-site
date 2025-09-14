@@ -11,7 +11,7 @@ Welcome to the Solobase documentation.
 
 ```bash
 # Install
-go install github.com/suppers-ai/solobase@latest
+go install github.com/suppers-ai/solobase/cmd/solobase@latest
 
 # Run
 solobase
