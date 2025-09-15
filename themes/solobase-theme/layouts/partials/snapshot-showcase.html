@@ -94,55 +94,74 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start">
-                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+        <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
+            <div class="bg-white px-6 pt-6 pb-5">
+                <!-- Icon and Title -->
+                <div class="text-center mb-5">
+                    <div class="flex items-center justify-center mb-3">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title" style="font-family: 'Itim', cursive;">
-                            Welcome to the Solobase Demo
-                        </h3>
-                        <div class="mt-4">
-                            <p class="text-sm text-gray-600 mb-4" style="font-family: 'Itim', cursive;">
-                                This is a demo instance of Solobase. Please note:
-                            </p>
-                            <ul class="text-sm text-gray-600 list-disc list-inside mb-4" style="font-family: 'Itim', cursive;">
-                                <li>The demo is in <strong>read-only mode</strong></li>
-                                <li>Data is <strong>reset regularly</strong></li>
-                                <li>Some features may be limited</li>
-                            </ul>
-                            <div class="bg-gray-100 rounded-lg p-4 mt-4">
-                                <p class="text-sm font-semibold text-gray-900 mb-2" style="font-family: 'Itim', cursive;">Login Credentials:</p>
-                                <div class="space-y-2">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-600" style="font-family: 'Itim', cursive;">Email:</span>
-                                        <code class="text-sm bg-white px-2 py-1 rounded border border-gray-300" style="font-family: 'Courier New', monospace;">admin@example.com</code>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-600" style="font-family: 'Itim', cursive;">Password:</span>
-                                        <code class="text-sm bg-white px-2 py-1 rounded border border-gray-300" style="font-family: 'Courier New', monospace;">admin123</code>
-                                    </div>
-                                </div>
+                    <h3 class="text-xl font-semibold text-gray-900" id="modal-title" style="font-family: 'Itim', cursive;">
+                        Welcome to the Solobase Demo
+                    </h3>
+                </div>
+
+                <!-- Content -->
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-600" style="font-family: 'Itim', cursive;">
+                        This is a demo instance of Solobase. Please note:
+                    </p>
+
+                    <ul class="text-sm text-gray-600 space-y-2 pl-5" style="font-family: 'Itim', cursive;">
+                        <li class="flex items-start">
+                            <span class="text-gray-400 mr-2">•</span>
+                            <span>The demo is in <strong class="text-gray-800">read-only mode</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-gray-400 mr-2">•</span>
+                            <span>Data is <strong class="text-gray-800">reset regularly</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-gray-400 mr-2">•</span>
+                            <span>Some features may be limited</span>
+                        </li>
+                    </ul>
+
+                    <!-- Credentials Box -->
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900 mb-3" style="font-family: 'Itim', cursive;">
+                            Login Credentials:
+                        </p>
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-3 gap-2 items-center">
+                                <span class="text-sm text-gray-600" style="font-family: 'Itim', cursive;">Email:</span>
+                                <code class="col-span-2 text-sm bg-white px-3 py-1.5 rounded border border-gray-300 text-center" style="font-family: 'Courier New', monospace;">admin@example.com</code>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 items-center">
+                                <span class="text-sm text-gray-600" style="font-family: 'Itim', cursive;">Password:</span>
+                                <code class="col-span-2 text-sm bg-white px-3 py-1.5 rounded border border-gray-300 text-center" style="font-family: 'Courier New', monospace;">admin123</code>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+
+            <!-- Footer Buttons -->
+            <div class="bg-gray-50 px-6 py-4 flex flex-row-reverse gap-3">
                 <a href="{{ .Site.Params.demo_url | default "https://solobase-demo.fly.dev/" }}"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                   class="inline-flex justify-center items-center rounded-lg px-5 py-2.5 bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                    style="font-family: 'Itim', cursive;">
                     Continue to Demo
                 </a>
                 <button type="button"
                         onclick="closeDemoModal()"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="inline-flex justify-center items-center rounded-lg px-5 py-2.5 bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors"
                         style="font-family: 'Itim', cursive;">
                     Cancel
                 </button>
