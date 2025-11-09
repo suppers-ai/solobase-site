@@ -44,10 +44,10 @@
 
       <!-- Usage Summary -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 usage-instances">
           <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Instances</div>
-          <div class="text-3xl font-bold text-gray-900 dark:text-white">1<span class="text-sm text-gray-500 dark:text-gray-400">/1</span></div>
-          <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">100% of quota used</div>
+          <div class="text-3xl font-bold text-gray-900 dark:text-white">-<span class="text-sm text-gray-500 dark:text-gray-400">/-</span></div>
+          <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">Loading...</div>
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -300,50 +300,400 @@
 </div>
 
 <script>
+// Configuration
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:8090/api'
+  : 'https://manage.solobase.cloud/api';
+
+// State
+let currentUser = null;
+let currentPlan = null;
+let instances = [];
+
+// Authentication helper
+function getAuthToken() {
+  return localStorage.getItem('solobase_token');
+}
+
+function isAuthenticated() {
+  return !!getAuthToken();
+}
+
+async function fetchAPI(endpoint, options = {}) {
+  const token = getAuthToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers
+  });
+
+  if (response.status === 401) {
+    // Redirect to login
+    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+    return;
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || 'Request failed');
+  }
+
+  return data;
+}
+
+// Load current user
+async function loadCurrentUser() {
+  try {
+    const response = await fetchAPI('/auth/me');
+    currentUser = response.data.user;
+    return currentUser;
+  } catch (error) {
+    console.error('Failed to load user:', error);
+    window.location.href = '/login';
+  }
+}
+
+// Load user's subscription plan
+async function loadSubscription() {
+  try {
+    const response = await fetchAPI(`/products?type=subscription_plan&user_id=${currentUser.id}`);
+    if (response.data && response.data.length > 0) {
+      currentPlan = response.data[0];
+      renderPlanInfo();
+    }
+  } catch (error) {
+    console.error('Failed to load subscription:', error);
+  }
+}
+
+// Load user's instances
+async function loadInstances() {
+  try {
+    const response = await fetchAPI(`/products?type=instance&user_id=${currentUser.id}`);
+    instances = response.data || [];
+    renderInstances();
+    renderUsageSummary();
+  } catch (error) {
+    console.error('Failed to load instances:', error);
+    document.getElementById('instances-list').innerHTML = `
+      <div class="p-6 text-center text-gray-500">
+        <p>Failed to load instances. Please try again.</p>
+      </div>
+    `;
+  }
+}
+
+// Render instances list
+function renderInstances() {
+  const container = document.getElementById('instances-list');
+
+  if (instances.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No instances</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new instance.</p>
+        <div class="mt-6">
+          <button onclick="switchTab('create')" class="px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700">
+            Create Instance
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = instances.map(instance => {
+    const metadata = instance.metadata || {};
+    const resources = metadata.resources || {};
+    const status = metadata.status || 'unknown';
+    const subdomain = metadata.subdomain || 'unknown';
+    const url = resources.url || metadata.url || `https://${subdomain}.solobase.cloud`;
+
+    const statusColors = {
+      provisioning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+      running: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      error: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+      suspended: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+      terminated: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+    };
+
+    const statusColor = statusColors[status] || 'bg-gray-100 text-gray-800';
+
+    return `
+      <div class="instance-card p-6">
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <div class="flex items-center">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">${instance.name || subdomain}</h3>
+              <span class="ml-3 px-2 py-1 text-xs font-medium rounded-full ${statusColor}">
+                ${status.charAt(0).toUpperCase() + status.slice(1)}
+              </span>
+            </div>
+            ${status === 'running' ? `
+              <div class="mt-2 flex items-center text-sm text-gray-600 dark:text-gray-300">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                <a href="${url}" target="_blank" class="hover:text-cyan-600 dark:hover:text-cyan-400">
+                  ${subdomain}.solobase.cloud
+                </a>
+              </div>
+            ` : ''}
+            ${status === 'provisioning' ? `
+              <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                <svg class="inline w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Infrastructure is being provisioned... (8-12 minutes)
+              </div>
+            ` : ''}
+            ${status === 'error' ? `
+              <div class="mt-2 text-sm text-red-600 dark:text-red-400">
+                ${metadata.error || 'An error occurred during provisioning'}
+              </div>
+            ` : ''}
+            ${status === 'running' ? `
+              <div class="mt-3 flex items-center space-x-4 text-sm">
+                <div class="flex items-center text-gray-500 dark:text-gray-400">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                  </svg>
+                  DB: ${metadata.quotas?.database_storage_mb || 0}MB
+                </div>
+                <div class="flex items-center text-gray-500 dark:text-gray-400">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                  </svg>
+                  Storage: ${metadata.quotas?.file_storage_gb || 0}GB
+                </div>
+                ${metadata.last_health_check ? `
+                  <div class="flex items-center text-gray-500 dark:text-gray-400">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Last checked ${formatTimeAgo(metadata.last_health_check)}
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
+          </div>
+          <div class="ml-6 flex items-center space-x-2">
+            ${status === 'running' ? `
+              <a href="${url}/admin" target="_blank" class="px-3 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700">
+                Open Admin
+              </a>
+            ` : ''}
+            ${status === 'error' ? `
+              <button onclick="retryProvisioning('${instance.id}')" class="px-3 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700">
+                Retry
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Render usage summary
+function renderUsageSummary() {
+  if (!currentPlan) return;
+
+  const quotas = currentPlan.metadata?.quotas || {};
+  const instanceCount = instances.length;
+  const maxInstances = quotas.instances || 1;
+  const instancePercent = maxInstances === -1 ? 0 : Math.round((instanceCount / maxInstances) * 100);
+
+  // Update instance quota
+  const instanceQuota = document.querySelector('.usage-instances');
+  if (instanceQuota) {
+    instanceQuota.innerHTML = `
+      <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Instances</div>
+      <div class="text-3xl font-bold text-gray-900 dark:text-white">
+        ${instanceCount}<span class="text-sm text-gray-500 dark:text-gray-400">/${maxInstances === -1 ? '∞' : maxInstances}</span>
+      </div>
+      <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">
+        ${maxInstances === -1 ? 'Unlimited' : `${instancePercent}% of quota used`}
+      </div>
+    `;
+  }
+}
+
+// Render plan info in billing tab
+function renderPlanInfo() {
+  if (!currentPlan) return;
+
+  const planName = currentPlan.name;
+  const planPrice = currentPlan.price;
+  const planDescription = currentPlan.description;
+
+  document.querySelector('#tab-billing h3').textContent = `${planName} Plan`;
+  document.querySelector('#tab-billing .text-3xl').innerHTML = `$${planPrice}<span class="text-sm text-gray-500 dark:text-gray-400">/mo</span>`;
+  document.querySelector('#tab-billing p.text-sm').textContent = planDescription;
+}
+
+// Create instance via Stripe Checkout
+async function createInstance(e) {
+  e.preventDefault();
+
+  if (!currentPlan) {
+    alert('Please subscribe to a plan first');
+    window.location.href = '/pricing/';
+    return;
+  }
+
+  const subdomain = document.getElementById('subdomain').value;
+  const adminEmail = document.getElementById('admin-email').value;
+  const adminPassword = document.getElementById('admin-password').value;
+
+  // Check if user has reached instance quota
+  const quotas = currentPlan.metadata?.quotas || {};
+  const maxInstances = quotas.instances || 1;
+  if (maxInstances !== -1 && instances.length >= maxInstances) {
+    alert(`You have reached your instance quota (${maxInstances}). Please upgrade your plan.`);
+    switchTab('billing');
+    return;
+  }
+
+  try {
+    const button = e.target.querySelector('button[type="submit"]');
+    button.disabled = true;
+    button.textContent = 'Creating...';
+
+    // Create instance product directly (already subscribed)
+    const response = await fetchAPI('/products', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'instance',
+        name: `${subdomain} Instance`,
+        metadata: {
+          user_id: currentUser.id,
+          subdomain: subdomain,
+          status: 'provisioning',
+          plan_id: currentPlan.id,
+          admin_email: adminEmail,
+          admin_password: adminPassword,
+          quotas: quotas
+        }
+      })
+    });
+
+    alert('Instance creation started! Provisioning will take 8-12 minutes. You can monitor progress in the Instances tab.');
+
+    // Reset form and switch to instances tab
+    e.target.reset();
+    switchTab('instances');
+
+    // Reload instances
+    await loadInstances();
+
+  } catch (error) {
+    alert('Failed to create instance: ' + error.message);
+  } finally {
+    const button = e.target.querySelector('button[type="submit"]');
+    button.disabled = false;
+    button.textContent = 'Create Instance';
+  }
+}
+
+// Retry provisioning
+async function retryProvisioning(instanceId) {
+  try {
+    await fetchAPI(`/products/${instanceId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        metadata: {
+          status: 'provisioning',
+          error: null
+        }
+      })
+    });
+
+    alert('Retrying provisioning...');
+    await loadInstances();
+  } catch (error) {
+    alert('Failed to retry: ' + error.message);
+  }
+}
+
+// Format time ago
+function formatTimeAgo(timestamp) {
+  const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
+
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+  return `${Math.floor(seconds / 86400)} days ago`;
+}
+
 // Tab navigation
-document.addEventListener('DOMContentLoaded', function() {
+function switchTab(tabName) {
   const tabButtons = document.querySelectorAll('.tab-button');
   const tabContents = document.querySelectorAll('.tab-content');
 
+  tabButtons.forEach(btn => {
+    btn.classList.remove('active', 'border-cyan-500', 'text-cyan-600', 'dark:text-cyan-400');
+    btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+  });
+
+  const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+  if (activeButton) {
+    activeButton.classList.add('active', 'border-cyan-500', 'text-cyan-600', 'dark:text-cyan-400');
+    activeButton.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+  }
+
+  tabContents.forEach(content => {
+    content.classList.add('hidden');
+  });
+  document.getElementById('tab-' + tabName).classList.remove('hidden');
+}
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', async function() {
+  // Check authentication
+  if (!isAuthenticated()) {
+    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+    return;
+  }
+
+  // Load data
+  await loadCurrentUser();
+  await loadSubscription();
+  await loadInstances();
+
+  // Setup tab navigation
+  const tabButtons = document.querySelectorAll('.tab-button');
   tabButtons.forEach(button => {
     button.addEventListener('click', function() {
-      const tabName = this.getAttribute('data-tab');
-
-      // Update button states
-      tabButtons.forEach(btn => {
-        btn.classList.remove('active', 'border-cyan-500', 'text-cyan-600', 'dark:text-cyan-400');
-        btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-      });
-      this.classList.add('active', 'border-cyan-500', 'text-cyan-600', 'dark:text-cyan-400');
-      this.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-
-      // Update content visibility
-      tabContents.forEach(content => {
-        content.classList.add('hidden');
-      });
-      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      switchTab(this.getAttribute('data-tab'));
     });
   });
 
   // Handle create instance form
   const createForm = document.getElementById('create-instance-form');
   if (createForm) {
-    createForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const formData = {
-        name: document.getElementById('instance-name').value,
-        subdomain: document.getElementById('subdomain').value,
-        admin_email: document.getElementById('admin-email').value,
-        admin_password: document.getElementById('admin-password').value
-      };
-
-      // TODO: Call API to create instance
-      console.log('Creating instance:', formData);
-
-      alert('Instance creation started! This will take 8-12 minutes. You will receive an email when ready.');
-    });
+    createForm.addEventListener('submit', createInstance);
   }
+
+  // Auto-refresh instances every 30 seconds if any are provisioning
+  setInterval(async () => {
+    const hasProvisioning = instances.some(i => i.metadata?.status === 'provisioning');
+    if (hasProvisioning) {
+      await loadInstances();
+    }
+  }, 30000);
 });
 </script>
 
