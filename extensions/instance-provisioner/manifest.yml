@@ -1,0 +1,94 @@
+name: instance-provisioner
+version: 1.0.0
+description: Provisions AWS infrastructure for customer Solobase instances
+author: Solobase Team
+
+# Extension hooks
+hooks:
+  # Called when a product is created
+  - event: product.created
+    handler: OnProductCreated
+
+  # Called when a product is updated
+  - event: product.updated
+    handler: OnProductUpdated
+
+  # Called periodically to check instance health
+  - event: cron
+    schedule: "*/5 * * * *"  # Every 5 minutes
+    handler: HealthCheckInstances
+
+# Configuration schema
+config:
+  aws_region:
+    type: string
+    required: true
+    default: "us-east-1"
+    description: "AWS region for resources"
+
+  b2_key_id:
+    type: string
+    required: true
+    env: B2_KEY_ID
+    description: "Backblaze B2 application key ID"
+
+  b2_app_key:
+    type: string
+    required: true
+    env: B2_APP_KEY
+    secret: true
+    description: "Backblaze B2 application key"
+
+  shared_rds_endpoint:
+    type: string
+    required: true
+    env: SHARED_RDS_ENDPOINT
+    description: "Shared RDS PostgreSQL endpoint"
+
+  shared_rds_master_user:
+    type: string
+    required: true
+    env: SHARED_RDS_MASTER_USER
+    description: "Shared RDS master username"
+
+  shared_rds_master_pass:
+    type: string
+    required: true
+    env: SHARED_RDS_MASTER_PASS
+    secret: true
+    description: "Shared RDS master password"
+
+  solobase_binary_s3_bucket:
+    type: string
+    required: true
+    default: "solobase-lambda-binaries"
+    description: "S3 bucket containing Solobase Lambda binaries"
+
+  cloudfront_key_pair_id:
+    type: string
+    required: false
+    env: CLOUDFRONT_KEY_PAIR_ID
+    description: "CloudFront key pair ID for signed URLs"
+
+# Permissions required
+permissions:
+  - name: products.read
+    description: "Read product information"
+  - name: products.write
+    description: "Update product metadata"
+  - name: aws.lambda.create
+    description: "Create Lambda functions"
+  - name: aws.rds.connect
+    description: "Connect to RDS instances"
+  - name: aws.cloudfront.create
+    description: "Create CloudFront distributions"
+
+# Dependencies
+dependencies:
+  - products >= 1.0.0
+
+# Database migrations (if needed)
+migrations:
+  - version: 1
+    description: "Add instance provisioning metadata tables"
+    file: migrations/001_initial.sql

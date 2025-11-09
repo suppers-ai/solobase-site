@@ -16,12 +16,18 @@ menu:
     - name: 'Home'
       url: '/'
       weight: 10
+    - name: 'Pricing'
+      url: '/pricing/'
+      weight: 15
     - name: 'Documentation'
       url: '/docs/'
       weight: 20
     - name: 'Live Demo'
       url: 'https://solobase-demo.fly.dev/'
       weight: 30
+    - name: 'Dashboard'
+      url: '/dashboard/'
+      weight: 35
     - name: 'Discord'
       url: 'https://discord.gg/jKqMcbrVzm'
       weight: 40
