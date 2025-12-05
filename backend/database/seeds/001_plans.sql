@@ -82,23 +82,6 @@ INSERT INTO plans (
     99.9, -- 99.9% SLA
     'priority',
     12 -- 12-hour response time
-),
-(
-    'enterprise',
-    'Enterprise',
-    'Custom solutions for large organizations',
-    49900, -- $499.00/month (starting price, customizable)
-    NULL, -- Custom yearly pricing
-    -1, -- unlimited instances
-    -1, -- unlimited database
-    -1, -- unlimited storage
-    -1, -- unlimited API requests
-    'dedicated',
-    'ecs',
-    FALSE, -- always-on
-    TRUE, -- custom domain support
-    TRUE, -- real-time backups
-    99.99, -- 99.99% SLA
-    'white-glove',
-    4 -- 4-hour response time
 );
+
+-- Note: Enterprise plan is handled via "Contact Sales" - pricing is custom per customer

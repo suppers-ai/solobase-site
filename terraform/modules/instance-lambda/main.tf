@@ -50,7 +50,7 @@ variable "b2_bucket_name" {
 variable "b2_endpoint" {
   description = "Backblaze B2 S3-compatible endpoint"
   type        = string
-  default     = "https://s3.us-west-004.backblazeb2.com"
+  default     = "https://s3.us-east-005.backblazeb2.com"
 }
 
 variable "b2_key_id" {
@@ -157,7 +157,7 @@ resource "aws_lambda_function" "instance" {
         DATABASE_URL  = var.database_url
         S3_ENDPOINT   = var.b2_endpoint
         S3_BUCKET     = var.b2_bucket_name
-        S3_REGION     = "us-west-004"
+        S3_REGION     = "us-east-005"
         B2_KEY_ID     = var.b2_key_id
         B2_APP_KEY    = var.b2_app_key
         JWT_SECRET    = random_password.jwt_secret.result

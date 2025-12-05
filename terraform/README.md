@@ -74,7 +74,7 @@ module "customer_instance" {
   solobase_binary_s3_key    = "solobase-v0.1.0.zip"
   database_url              = "postgresql://user:pass@host:5432/db"
   b2_bucket_name            = "solobase-a1b2c3d4"
-  b2_endpoint               = "https://s3.us-west-004.backblazeb2.com"
+  b2_endpoint               = "https://s3.us-east-005.backblazeb2.com"
   b2_key_id                 = var.b2_key_id
   b2_app_key                = var.b2_app_key
   memory_size               = 512

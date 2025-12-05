@@ -68,11 +68,7 @@ aws configure
 aws s3 mb s3://solobase-terraform-state --region us-east-1
 
 # Create DynamoDB table for Terraform state locking
-aws dynamodb create-table \
-  --table-name solobase-terraform-locks \
-  --attribute-definitions AttributeName=LockID,AttributeType=S \
-  --key-schema AttributeName=LockID,KeyType=HASH \
-  --billing-mode PAY_PER_REQUEST
+aws dynamodb create-table --table-name solobase-terraform-locks --attribute-definitions AttributeName=LockID,AttributeType=S --key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST
 ```
 
 ### 1.2 Backblaze B2 Setup
@@ -90,10 +86,10 @@ pip install awscli
 aws configure --profile b2
 # AWS Access Key ID: <B2 Key ID>
 # AWS Secret Access Key: <B2 Application Key>
-# Default region name: us-west-004
+# Default region name: us-east-005
 
 # Test bucket creation
-aws s3 mb s3://test-bucket --endpoint-url=https://s3.us-west-004.backblazeb2.com --profile b2
+aws s3 mb s3://test-bucket --endpoint-url=https://s3.us-east-005.backblazeb2.com --profile b2
 ```
 
 ### 1.3 Stripe Setup
@@ -110,17 +106,7 @@ brew install stripe/stripe-cli/stripe
 stripe login
 
 # Create products
-stripe products create \
-  --name "Hobby" \
-  --description "Perfect for side projects"
-
 # Create price for Hobby plan
-stripe prices create \
-  --product <product_id> \
-  --unit-amount 500 \
-  --currency usd \
-  --recurring[interval]=month
-
 # Repeat for all plans (Starter, Professional, Business)
 ```
 

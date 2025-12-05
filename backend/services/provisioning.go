@@ -6,28 +6,27 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/google/uuid"
 )
 
 // ProvisioningService handles infrastructure provisioning for customer instances
 type ProvisioningService struct {
-	awsRegion      string
-	b2KeyID        string
-	b2AppKey       string
+	awsRegion           string
+	b2KeyID             string
+	b2AppKey            string
 	cloudFrontKeyPairID string
-	managementDBURL string
+	managementDBURL     string
 }
 
 // NewProvisioningService creates a new provisioning service
 func NewProvisioningService(awsRegion, b2KeyID, b2AppKey, cloudFrontKeyPairID, dbURL string) *ProvisioningService {
 	return &ProvisioningService{
-		awsRegion:      awsRegion,
-		b2KeyID:        b2KeyID,
-		b2AppKey:       b2AppKey,
+		awsRegion:           awsRegion,
+		b2KeyID:             b2KeyID,
+		b2AppKey:            b2AppKey,
 		cloudFrontKeyPairID: cloudFrontKeyPairID,
-		managementDBURL: dbURL,
+		managementDBURL:     dbURL,
 	}
 }
 
@@ -48,22 +47,22 @@ type ProvisionInstanceInput struct {
 
 // ProvisionInstanceOutput represents the result of provisioning
 type ProvisionInstanceOutput struct {
-	InstanceID             uuid.UUID
-	DatabaseEndpoint       string
-	DatabaseName           string
-	DatabaseUser           string
-	DatabasePassword       string
-	B2BucketName           string
-	B2BucketID             string
-	B2ApplicationKeyID     string
-	B2ApplicationKey       string
-	LambdaFunctionARN      string
-	LambdaFunctionURL      string
+	InstanceID               uuid.UUID
+	DatabaseEndpoint         string
+	DatabaseName             string
+	DatabaseUser             string
+	DatabasePassword         string
+	B2BucketName             string
+	B2BucketID               string
+	B2ApplicationKeyID       string
+	B2ApplicationKey         string
+	LambdaFunctionARN        string
+	LambdaFunctionURL        string
 	CloudFrontDistributionID string
-	CloudFrontDomain       string
-	InstanceURL            string
-	Status                 string
-	Error                  string
+	CloudFrontDomain         string
+	InstanceURL              string
+	Status                   string
+	Error                    string
 }
 
 // ProvisionInstance provisions all infrastructure for a customer instance
@@ -280,14 +279,14 @@ func (s *ProvisioningService) provisionLambda(ctx context.Context, input Provisi
 
 	// Environment variables for Solobase
 	envVars := map[string]string{
-		"DATABASE_URL":  fmt.Sprintf("postgresql://%s:%s@%s:5432/%s", db.User, db.Password, db.Endpoint, db.DatabaseName),
-		"S3_ENDPOINT":   "https://s3.us-west-004.backblazeb2.com",
-		"S3_BUCKET":     storage.BucketName,
-		"S3_REGION":     "us-west-004",
-		"B2_KEY_ID":     storage.ApplicationKeyID,
-		"B2_APP_KEY":    storage.ApplicationKey,
-		"JWT_SECRET":    generateSecurePassword(64),
-		"PORT":          "8080",
+		"DATABASE_URL": fmt.Sprintf("postgresql://%s:%s@%s:5432/%s", db.User, db.Password, db.Endpoint, db.DatabaseName),
+		"S3_ENDPOINT":  "https://s3.us-east-005.backblazeb2.com",
+		"S3_BUCKET":    storage.BucketName,
+		"S3_REGION":    "us-east-005",
+		"B2_KEY_ID":    storage.ApplicationKeyID,
+		"B2_APP_KEY":   storage.ApplicationKey,
+		"JWT_SECRET":   generateSecurePassword(64),
+		"PORT":         "8080",
 	}
 
 	// Merge custom env vars
