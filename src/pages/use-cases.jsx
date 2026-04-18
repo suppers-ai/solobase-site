@@ -12,13 +12,14 @@ function UseCasesPage() {
       <main>
         {/* Hero */}
         <section class="text-center py-16 sm:py-20 px-6 max-w-3xl mx-auto">
-          <h1 class="text-responsive-xl font-bold text-gray-800 mb-4">
+          <h1 class="text-responsive-xl font-bold text-gray-800 mb-4 leading-tight">
             Rethink what a{' '}
-            <span style={{ color: 'var(--primary)' }}>backend</span> can do
+            <span style={{ color: 'var(--primary)' }}>backend</span>
+            <span class="block">can do</span>
           </h1>
           <p class="text-responsive-sm text-gray-500 max-w-xl mx-auto">
-            A backend that runs in a browser tab, ships as a single binary, or
-            scales across the globe. Same codebase, limitless possibilities.
+            A backend that ships as a single binary — or runs in a browser tab.
+            Same codebase, yours to deploy anywhere.
           </p>
         </section>
 
@@ -84,8 +85,8 @@ function UseCasesPage() {
             Ready to build?
           </h2>
           <p class="text-gray-500 text-lg mb-6">
-            Same codebase runs everywhere. Start in the browser, deploy to the
-            edge.
+            Same codebase, everywhere. Run it as a binary or drop it in a
+            browser.
           </p>
           <div class="flex justify-center gap-3 flex-wrap">
             <a
