@@ -129,97 +129,49 @@ function GetStarted() {
   return (
     <section style={{ background: "#ffffff", padding: "0 1.5rem 4rem" }}>
       <div class="max-w-2xl mx-auto">
-        {/* Browser option — easiest path, shown first */}
+        <CodeBlock />
+        {/* Browser demo — no-install escape hatch */}
         <div
-          class="mb-8"
+          class="flex flex-col items-center text-center"
           style={{
-            background: "#fff7f4",
-            border: "2px solid #fe6627",
-            borderRadius: "0.75rem",
-            padding: "1.5rem 2rem",
+            marginTop: "2.5rem",
+            border: "1px solid #e5e7eb",
+            borderRadius: "0.5rem",
+            padding: "2rem 1.5rem",
+            background: "#ffffff",
           }}
         >
-          <div class="flex items-start gap-4">
-            <div
-              style={{
-                flexShrink: 0,
-                width: "2.5rem",
-                height: "2.5rem",
-                borderRadius: "0.5rem",
-                background: "#fe6627",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "white",
-              }}
-            >
-              <svg
-                style={{ width: "1.25rem", height: "1.25rem" }}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div class="flex items-center gap-2 mb-1">
-                <h3 class="font-semibold text-gray-900" style={{ fontSize: "1rem" }}>
-                  Browser (No Install)
-                </h3>
-                <span
-                  style={{
-                    fontSize: "0.65rem",
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                    background: "#fe6627",
-                    color: "white",
-                    padding: "0.125rem 0.4rem",
-                    borderRadius: "0.25rem",
-                  }}
-                >
-                  Easiest
-                </span>
-              </div>
-              <p class="text-sm text-gray-600 mb-3">
-                No download. No setup. Runs entirely in your browser.
-              </p>
-              <a
-                href="https://demo.solobase.dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  padding: "0.5rem 1.25rem",
-                  background: "#fe6627",
-                  color: "white",
-                  borderRadius: "0.5rem",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  transition: "background 0.2s",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.background = "#e55a1f")}
-                onMouseOut={(e) => (e.currentTarget.style.background = "#fe6627")}
-              >
-                Try Now
-              </a>
-              <p
-                class="text-gray-400"
-                style={{ fontSize: "0.75rem", marginTop: "0.75rem" }}
-              >
-                Data stays in your browser — local only, no sync between devices.
-                Storage limited by browser quotas.
-              </p>
-            </div>
-          </div>
+          <p
+            class="text-gray-700"
+            style={{
+              margin: 0,
+              marginBottom: "1.5rem",
+              fontSize: "1.125rem",
+              lineHeight: 1.5,
+            }}
+          >
+            No time to run a command? I feel you.
+          </p>
+          <a
+            href="https://demo.solobase.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: "0.75rem 1.75rem",
+              background: "#fe6627",
+              color: "white",
+              borderRadius: "0.5rem",
+              fontWeight: 600,
+              fontSize: "1rem",
+              transition: "background 0.15s",
+              whiteSpace: "nowrap",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.background = "#e55a1f")}
+            onMouseOut={(e) => (e.currentTarget.style.background = "#fe6627")}
+          >
+            Demo website
+          </a>
         </div>
-        <CodeBlock />
       </div>
     </section>
   );
@@ -229,7 +181,7 @@ function PlatformAgnostic() {
   const items = [
     {
       title: "Run anywhere",
-      desc: "Single binary runs on Linux, macOS, Windows — or deploy to Cloudflare Workers. Same code, any platform.",
+      desc: "Linux, macOS, Windows, or in the browser — that's right, a backend running on the frontend.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -248,7 +200,7 @@ function PlatformAgnostic() {
     },
     {
       title: "Swap backends freely",
-      desc: "Switch from SQLite to Postgres, local disk to S3 — just change config.",
+      desc: "Grows and changes with your needs — swap SQLite for Postgres, disk for S3.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -267,7 +219,7 @@ function PlatformAgnostic() {
     },
     {
       title: "Local-first development",
-      desc: "Full backend running on localhost in seconds. Test everything locally before deploying — no cloud account required.",
+      desc: "Run a full backend locally in seconds — no cloud accounts, no emulators, no Docker.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -293,8 +245,7 @@ function PlatformAgnostic() {
           Platform Agnostic by Design
         </h2>
         <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          Build once, deploy anywhere. No vendor lock-in, no rewriting code when
-          your infrastructure changes.
+          Build once. Deploy anywhere. No lock-in.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {items.map((item) => (
@@ -319,8 +270,8 @@ function PlatformAgnostic() {
 function AgentReady() {
   const points = [
     {
-      title: "REST API out of the box",
-      desc: "Every block exposes a clean REST API. Agents can create users, query data, upload files, and manage products — all with standard HTTP calls.",
+      title: "Code as simple blocks",
+      desc: "Every feature is a small block with a clear spec — easy to read, easy to test, easy for an agent to reason about.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -332,71 +283,14 @@ function AgentReady() {
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="1.5"
-            d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            d="M4 6a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 15a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3zM13 6a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2h-3a2 2 0 01-2-2V6zM13 15a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2h-3a2 2 0 01-2-2v-3z"
           />
         </svg>
       ),
     },
     {
-      title: "Structured data storage",
-      desc: "Collections with automatic schemas, relational queries, and full CRUD. Agents get a real database — not a flat file or key-value hack.",
-      icon: (
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "Auth built in",
-      desc: "JWT tokens, API keys, and role-based access control. Agents can authenticate users and enforce permissions without building auth from scratch.",
-      icon: (
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "File handling",
-      desc: "Upload, organize, and serve files through the API. Agents can store outputs, serve assets, or manage user uploads with built-in quota tracking.",
-      icon: (
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "Instant spin-up",
-      desc: "One binary, zero dependencies. Spin up a full backend in seconds — perfect for agent workflows that need to provision environments on the fly.",
+      title: "Spin up per task",
+      desc: "Fresh backend in a second. Throw it away when the agent's done.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -414,8 +308,8 @@ function AgentReady() {
       ),
     },
     {
-      title: "Extend with WASM blocks",
-      desc: "Need custom logic? Ship it as a WASM block. Agents can use domain-specific tools without forking the backend or waiting for features.",
+      title: "WASM plugins, sandboxed",
+      desc: "Agents can build any block they want — and the sandbox lets you decide exactly how it behaves.",
       icon: (
         <svg
           class="w-6 h-6"
@@ -441,10 +335,9 @@ function AgentReady() {
           Built for AI Agents
         </h2>
         <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
-          AI agents need backends too. Solobase gives them a complete,
-          API-driven infrastructure they can provision and use autonomously.
+          A backend agents can spin up and actually use.
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {points.map((item) => (
             <div
               key={item.title}

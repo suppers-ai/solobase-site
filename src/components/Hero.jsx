@@ -126,8 +126,11 @@ export default function Hero() {
         <h1 class="text-5xl md:text-6xl font-bold mb-6" style={{ marginTop: 0, color: '#1f2937', letterSpacing: '-0.02em' }}>
           Solobase
         </h1>
-        <p class="text-xl md:text-2xl mb-12 max-w-2xl mx-auto" style={{ color: '#6b7280' }}>
-          A fast backend without the overcomplicated setup or dependencies. Just a single binary.
+        <p class="text-xl md:text-2xl mb-4 max-w-2xl mx-auto" style={{ color: '#374151' }}>
+          A backend your agent can actually understand.
+        </p>
+        <p class="text-base md:text-lg mb-12 max-w-2xl mx-auto" style={{ color: '#6b7280' }}>
+          A ground-up rethink of backends and extensions — auth, db, storage, admin in one simple binary or wasm. Plugins run sandboxed, so <code style={{ background: '#f3f4f6', padding: '0.1rem 0.35rem', borderRadius: '0.25rem', fontSize: '0.9em' }}>install</code> isn't a prayer.
         </p>
       </div>
     </section>
