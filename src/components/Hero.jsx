@@ -127,10 +127,10 @@ export default function Hero() {
           Solobase
         </h1>
         <p class="text-xl md:text-2xl mb-4 max-w-2xl mx-auto" style={{ color: '#374151' }}>
-          A backend your agent can actually understand.
+          A backend built from one visionary prompt:
         </p>
-        <p class="text-base md:text-lg mb-12 max-w-2xl mx-auto" style={{ color: '#6b7280' }}>
-          A ground-up rethink of backends and extensions — auth, db, storage, admin in one simple binary or wasm. Plugins run sandboxed, so <code style={{ background: '#f3f4f6', padding: '0.1rem 0.35rem', borderRadius: '0.25rem', fontSize: '0.9em' }}>install</code> isn't a prayer.
+        <p class="text-base md:text-lg mb-12 max-w-2xl mx-auto italic" style={{ color: '#6b7280' }}>
+          "Rethink what a backend is from the ground up — auth, db, and storage should be service-agnostic, compile to one binary and wasm, and allow third-party extensions in a safe sandbox. Make no mistakes. Thanks."
         </p>
       </div>
     </section>

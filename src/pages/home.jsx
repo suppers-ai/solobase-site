@@ -417,6 +417,31 @@ function HomePage() {
     <>
       <Header onOpenDemo={() => setDemoOpen(true)} />
       <main>
+        <div class="text-center pt-6 px-6" style={{ background: '#ffffff' }}>
+          <a
+            href="/notes/"
+            class="inline-flex items-center gap-1.5 text-sm font-medium"
+            style={{
+              padding: '0.375rem 0.875rem',
+              border: '1px solid #fed7aa',
+              background: '#fff7ed',
+              color: '#c2410c',
+              borderRadius: '9999px',
+              transition: 'background 0.15s, border-color 0.15s',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#ffedd5';
+              e.currentTarget.style.borderColor = '#fdba74';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#fff7ed';
+              e.currentTarget.style.borderColor = '#fed7aa';
+            }}
+          >
+            <span style={{ fontSize: '0.9rem' }}>⚠️</span>
+            Important notes — click me to read
+          </a>
+        </div>
         <Hero />
         <GetStarted />
         <PlatformAgnostic />
