@@ -31,8 +31,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        'use-cases': resolve(__dirname, 'use-cases/index.html'),
+        why: resolve(__dirname, 'why/index.html'),
         notes: resolve(__dirname, 'notes/index.html'),
+        docs: resolve(__dirname, 'docs/index.html'),
       },
     },
   },

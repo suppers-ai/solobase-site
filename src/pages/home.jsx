@@ -6,34 +6,36 @@ import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 import DemoModal from "../components/DemoModal";
 
+const RELEASES = "https://github.com/suppers-ai/solobase/releases/latest/download";
+
 const platforms = [
   {
     name: "Linux",
-    url: "https://solobase.dev/download/linux",
+    url: `${RELEASES}/solobase-linux-amd64.tar.gz`,
     extract: "tar xz",
     run: "./solobase",
   },
   {
     name: "Linux ARM",
-    url: "https://solobase.dev/download/linux-arm",
+    url: `${RELEASES}/solobase-linux-arm64.tar.gz`,
     extract: "tar xz",
     run: "./solobase",
   },
   {
     name: "macOS",
-    url: "https://solobase.dev/download/mac",
+    url: `${RELEASES}/solobase-darwin-arm64.tar.gz`,
     extract: "tar xz",
     run: "./solobase",
   },
   {
     name: "macOS Intel",
-    url: "https://solobase.dev/download/mac-intel",
+    url: `${RELEASES}/solobase-darwin-amd64.tar.gz`,
     extract: "tar xz",
     run: "./solobase",
   },
   {
     name: "Windows",
-    url: "https://solobase.dev/download/windows",
+    url: `${RELEASES}/solobase-windows-amd64.zip`,
     extract: null,
     run: "solobase.exe",
   },

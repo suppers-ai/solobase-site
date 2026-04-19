@@ -11,7 +11,7 @@ export const siteConfig = {
 export const mainMenu = [
   { name: "Home", url: "/" },
   { name: "Notes", url: "/notes/" },
-  { name: "Use Cases", url: "/use-cases/" },
+  { name: "Why", url: "/why/" },
   { name: "Docs", url: "/docs/" },
   { name: "Demo", url: "https://demo.solobase.dev", external: true },
 ];
