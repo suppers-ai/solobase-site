@@ -11,8 +11,8 @@ const faqs = [
     a: "Because the existing options either cost a fortune at scale, lock you into one cloud, or make you glue together five services just to ship a login form. Solobase is one thing you run, wherever you run it.",
   },
   {
-    q: 'How is this different from Pocketbase, Supabase, Google, or AWS?',
-    a: "Pocketbase is the closest in spirit — single Go binary, batteries included. Solobase goes further: it also compiles to WebAssembly so a full backend can run in a browser tab, and plugins are sandboxed WASM modules rather than Go code. Supabase, Google, and AWS are hosted platforms; Solobase is a binary you own and can host wherever you want — no provider lock-in.",
+    q: 'How is this different from Supabase, Google, or AWS?',
+    a: "Supabase, Google, and AWS are hosted platforms — you rent compute and hand over your data. Solobase is a single binary you own and can host wherever you want, with no provider lock-in. It also compiles to WebAssembly so a full backend can run in a browser tab, and plugins are sandboxed WASM modules rather than native code you have to trust.",
   },
   {
     q: 'Is it production-ready?',
