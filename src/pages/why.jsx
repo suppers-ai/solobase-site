@@ -42,7 +42,32 @@ function WhyPage() {
           <h1 class="text-responsive-xl font-bold text-gray-800 mb-8 leading-tight">
             Why this <span style={{ color: 'var(--primary)' }}>exists</span>
           </h1>
-          <div class="space-y-5 text-gray-600 text-lg leading-relaxed">
+          <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
+            <h2 class="text-2xl font-bold text-gray-800 text-center pt-2">
+              A backend that is AI friendly
+            </h2>
+            <p>
+              I wanted a backend that enables AI to write code in small,
+              testable blocks — code that's easy to read, easy to test, and
+              easy to deploy. When every feature is a self-contained block
+              with a clear contract, review is faster, bugs are smaller, and
+              shipping a change is a single, sandboxed step instead of a
+              leap of faith.
+            </p>
+            <p>
+              The goal is simple: make deploying a feature as secure and as
+              fast as possible, whether it was written by me, by a teammate,
+              or by an AI pairing with either of us.
+            </p>
+          </div>
+        </section>
+
+        {/* And why I started it in the first place */}
+        <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20 text-center">
+          <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
+            <h2 class="text-2xl font-bold text-gray-800 text-center">
+              And why I started it in the first place
+            </h2>
             <p>
               Every time I start a new project — for a client, for a hackathon,
               for fun — the first questions are always the same. What stack am
