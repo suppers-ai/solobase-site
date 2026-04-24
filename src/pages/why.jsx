@@ -55,19 +55,19 @@ function WhyPage() {
               Every time, I'd ask myself the same thing: why is this such a
               pain? Why can't I just go straight into coding my idea?
             </p>
+            <p>
+              That's why Solobase exists.
+            </p>
           </div>
         </section>
 
-        {/* That's why Solobase exists. */}
+        {/* Solobase is also perfectly aligned with AI development */}
         <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20 text-center">
           <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
             <h2 class="text-2xl font-bold text-gray-800 text-center">
-              That's why Solobase exists.
-            </h2>
-            <p>
               Solobase is also perfectly aligned with AI development it
               enables:
-            </p>
+            </h2>
             <ul class="space-y-3 list-disc pl-6">
               <li>
                 <strong>Instant feedback loop</strong> — AI can run Solobase
@@ -82,7 +82,7 @@ function WhyPage() {
               </li>
               <li>
                 <strong>Cost savings, and error-proof by default</strong> —
-                your entire SSR frontend and backend ship as a single binary,
+                your entire frontend and backend can ship as a single binary,
                 so there's less infrastructure to pay for and fewer moving
                 parts to break.
               </li>
