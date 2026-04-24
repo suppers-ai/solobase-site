@@ -38,7 +38,7 @@ function WhyPage() {
       <Header />
       <main>
         {/* Why this exists */}
-        <section class="max-w-3xl mx-auto px-6 py-16 sm:py-20 text-center">
+        <section class="max-w-3xl mx-auto px-6 pt-16 sm:pt-20 pb-12 text-center">
           <h1 class="text-responsive-xl font-bold text-gray-800 mb-8 leading-tight">
             Why this <span style={{ color: 'var(--primary)' }}>exists</span>
           </h1>
@@ -62,31 +62,35 @@ function WhyPage() {
         </section>
 
         {/* Solobase is also perfectly aligned with AI development */}
-        <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20 text-center">
+        <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20">
           <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
-            <h2 class="text-2xl font-bold text-gray-800 text-center">
+            <h2 class="text-2xl font-bold text-gray-800">
               Solobase is also perfectly aligned with AI development it
               enables:
             </h2>
-            <ul class="space-y-3 list-disc pl-6">
+            <ul class="space-y-3 list-none pl-0">
               <li>
+                <span class="mr-2">⚡</span>
                 <strong>Instant feedback loop</strong> — AI can run Solobase
                 and test real output directly, without spinning up a stack of
                 emulators or mocks.
               </li>
               <li>
+                <span class="mr-2">🧪</span>
                 <strong>Feature and PR isolation</strong> — every pull
                 request can have its own isolated database and storage
                 instance, so you can see exactly what changed without
                 corrupting data or standing up yet another dev environment.
               </li>
               <li>
+                <span class="mr-2">📦</span>
                 <strong>Cost savings, and error-proof by default</strong> —
                 your entire frontend and backend can ship as a single binary,
                 so there's less infrastructure to pay for and fewer moving
                 parts to break.
               </li>
               <li>
+                <span class="mr-2">🛡️</span>
                 <strong>Secure-first design</strong> — external libraries
                 run inside a WebAssembly sandbox, so untrusted code can't
                 reach your filesystem, network, or data unless you
