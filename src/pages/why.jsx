@@ -43,31 +43,6 @@ function WhyPage() {
             Why this <span style={{ color: 'var(--primary)' }}>exists</span>
           </h1>
           <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
-            <h2 class="text-2xl font-bold text-gray-800 text-center pt-2">
-              A backend that is AI friendly
-            </h2>
-            <p>
-              I wanted a backend that enables AI to write code in small,
-              testable blocks — code that's easy to read, easy to test, and
-              easy to deploy. When every feature is a self-contained block
-              with a clear contract, review is faster, bugs are smaller, and
-              shipping a change is a single, sandboxed step instead of a
-              leap of faith.
-            </p>
-            <p>
-              The goal is simple: make deploying a feature as secure and as
-              fast as possible, whether it was written by me, by a teammate,
-              or by an AI pairing with either of us.
-            </p>
-          </div>
-        </section>
-
-        {/* And why I started it in the first place */}
-        <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20 text-center">
-          <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
-            <h2 class="text-2xl font-bold text-gray-800 text-center">
-              And why I started it in the first place
-            </h2>
             <p>
               Every time I start a new project — for a client, for a hackathon,
               for fun — the first questions are always the same. What stack am
@@ -80,9 +55,44 @@ function WhyPage() {
               Every time, I'd ask myself the same thing: why is this such a
               pain? Why can't I just go straight into coding my idea?
             </p>
-            <p>
+          </div>
+        </section>
+
+        {/* That's why Solobase exists. */}
+        <section class="max-w-3xl mx-auto px-6 pb-16 sm:pb-20 text-center">
+          <div class="space-y-5 text-gray-600 text-lg leading-relaxed text-left">
+            <h2 class="text-2xl font-bold text-gray-800 text-center">
               That's why Solobase exists.
+            </h2>
+            <p>
+              Solobase is also perfectly aligned with AI development it
+              enables:
             </p>
+            <ul class="space-y-3 list-disc pl-6">
+              <li>
+                <strong>Instant feedback loop</strong> — AI can run Solobase
+                and test real output directly, without spinning up a stack of
+                emulators or mocks.
+              </li>
+              <li>
+                <strong>Feature and PR isolation</strong> — every pull
+                request can have its own isolated database and storage
+                instance, so you can see exactly what changed without
+                corrupting data or standing up yet another dev environment.
+              </li>
+              <li>
+                <strong>Cost savings, and error-proof by default</strong> —
+                your entire SSR frontend and backend ship as a single binary,
+                so there's less infrastructure to pay for and fewer moving
+                parts to break.
+              </li>
+              <li>
+                <strong>Secure-first design</strong> — external libraries
+                run inside a WebAssembly sandbox, so untrusted code can't
+                reach your filesystem, network, or data unless you
+                explicitly allow it.
+              </li>
+            </ul>
           </div>
         </section>
 
