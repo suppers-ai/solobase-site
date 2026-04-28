@@ -181,6 +181,16 @@
     <a href="#installation">Installation</a>
     <a href="#first-run">First Run</a>
     <a href="#project-structure">Project Structure</a>
+    <a href="#tiers">Customization Tiers</a>
+
+    <h4>CLI</h4>
+    <a href="#cli-reference">CLI Reference</a>
+    <a href="#cli-verbs">Verbs</a>
+    <a href="#cli-modes">Modes</a>
+    <a href="#cli-targets">Targets</a>
+    <a href="#cli-profiles">Profiles</a>
+    <a href="#cli-env-overrides">Environment Overrides</a>
+    <a href="#cli-examples">Examples</a>
 
     <h4>Authentication</h4>
     <a href="#auth-signup">Signup</a>
@@ -230,6 +240,7 @@
     <a href="#wafer-flows">Flows</a>
 
     <h4>Configuration</h4>
+    <a href="#config-runtime-vs-build">.env vs solobase.toml</a>
     <a href="#config-env">Environment Variables</a>
     <a href="#config-blocks-json">blocks.json</a>
     <a href="#config-aliases">Aliases</a>
@@ -301,6 +312,37 @@ export JWT_SECRET=<span class="string">"your-secret-key-at-least-32-chars"</span
     solobase.db        <span class="comment"># SQLite database</span>
     storage/           <span class="comment"># Local file storage root</span>
   site/                <span class="comment"># Frontend assets (served by wafer-run/web)</span></code></pre>
+
+<h2 id="tiers">Customization Tiers</h2>
+<p>Solobase scales from "just a directory" to "embed Solobase as a Rust library". You only need to add the next tier when you want what it offers.</p>
+
+<h3>Tier 0 &mdash; just a directory</h3>
+<pre><code>mkdir my-app &amp;&amp; cd my-app
+solobase serve</code></pre>
+<p>The prebuilt server runs with sensible defaults. The app name comes from the directory name; the database lives at <code>data/&lt;dirname&gt;.db</code>. No config files required.</p>
+
+<h3>Tier 1 &mdash; <code>.env</code></h3>
+<p>Add a <code>.env</code> for runtime knobs (listen address, database path, enabled blocks, secrets):</p>
+<pre><code>SOLOBASE_LISTEN=0.0.0.0:9000
+SOLOBASE_DB_PATH=data/my-app.db
+SOLOBASE_BLOCK_ENABLED=suppers-ai/legalpages</code></pre>
+<p>Loaded at server start. Values that vary per deployment belong here.</p>
+
+<h3>Tier 2 &mdash; <code>solobase.toml</code></h3>
+<p>Add <code>solobase.toml</code> for build-time customization (custom title, asset overlays, WASM output dir):</p>
+<pre><code>[app]
+name          = <span class="string">"my-app"</span>
+title         = <span class="string">"My App"</span>
+boot_redirect = <span class="string">"/"</span>
+
+[[assets.overlay]]
+from = <span class="string">"site/custom.css"</span>
+to   = <span class="string">"custom.css"</span></code></pre>
+<p>Now <code>solobase build --target web</code> produces a static bundle with your overlays applied.</p>
+
+<h3>Embed mode &mdash; <code>Cargo.toml</code></h3>
+<p>When you need to embed Solobase as a Rust library (custom Rust code, extra dependencies, in-process blocks), add a <code>Cargo.toml</code>. The CLI auto-detects this and runs <code>cargo build</code> (native) or <code>wasm-pack build</code> (web) against your crate instead of using the prebuilt server.</p>
+<p>See the <code>gizza-ai</code> repo for a real-world example of an embed-mode app.</p>
 
 <!-- ====================================================================== -->
 <h1 id="authentication" style="margin-top:3rem">Authentication</h1>
@@ -871,6 +913,70 @@ block  *                 &rarr;  suppers-ai/auth/secrets/*  (readwrite)</code></
 <!-- ====================================================================== -->
 <h1 id="configuration" style="margin-top:3rem">Configuration</h1>
 
+<h2 id="config-runtime-vs-build"><code>.env</code> vs <code>solobase.toml</code></h2>
+<p>Solobase has two configuration files. They look similar but solve different problems &mdash; runtime vs build-time. Knowing which file does which is the most common point of confusion.</p>
+
+<h3>At a glance</h3>
+<table>
+    <tr>
+        <th></th>
+        <th><code>.env</code> (runtime)</th>
+        <th><code>solobase.toml</code> (build-time)</th>
+    </tr>
+    <tr><td><strong>Lifecycle</strong></td><td>varies per deployment</td><td>per-repo constant</td></tr>
+    <tr><td><strong>Audience</strong></td><td>ops / container env</td><td>repo author</td></tr>
+    <tr><td><strong>Git</strong></td><td>typically gitignored (secrets)</td><td>checked in</td></tr>
+    <tr><td><strong>Shape</strong></td><td>flat KV strings</td><td>structured TOML</td></tr>
+    <tr><td><strong>Examples</strong></td><td>DB path, JWT secret, listen port, block toggles</td><td>app.name, boot_redirect, asset overlays</td></tr>
+    <tr><td><strong>Loaded by</strong></td><td><code>solobase serve</code> runtime</td><td><code>solobase build</code> / <code>solobase serve</code></td></tr>
+</table>
+
+<h3><code>.env</code></h3>
+<p>Runtime configuration, loaded from the current working directory at server start. Use it for values that vary per deployment (database location, secrets, feature flags).</p>
+<pre><code>SOLOBASE_LISTEN=0.0.0.0:8091
+SOLOBASE_DB_PATH=data/blog.db
+
+SOLOBASE_SHARED__APP_NAME=Inkwell
+SOLOBASE_BLOCK_ENABLED=suppers-ai/legalpages
+SOLOBASE_BLOCK_DISABLED=suppers-ai/products,suppers-ai/projects</code></pre>
+<p>Variable naming convention:</p>
+<ul>
+    <li><code>SOLOBASE_*</code> &mdash; infrastructure (no double-underscore). Never persisted.</li>
+    <li><code>SOLOBASE_SHARED__*</code> &mdash; shared platform variables. Seeded into the DB.</li>
+    <li><code>{ORG}__{BLOCK}__*</code> &mdash; block-scoped variables. Seeded into the DB.</li>
+</ul>
+
+<h3><code>solobase.toml</code></h3>
+<p>Build-time configuration, used by <code>solobase build</code> (any target) and <code>solobase serve</code> during the build step. Use it for values that are constants of the repo (app name, asset overlays, build outputs).</p>
+<pre><code>[app]
+name          = <span class="string">"my-app"</span>
+title         = <span class="string">"My App"</span>
+boot_redirect = <span class="string">"/"</span>
+
+[assets]
+extra_bypass_prefix = [<span class="string">"/static.js"</span>]
+
+[[assets.overlay]]
+from = <span class="string">"site/index.html"</span>
+to   = <span class="string">"index.html"</span>
+
+[wasm]
+out_dir = <span class="string">"dist"</span>
+
+[solobase]
+<span class="comment"># Only for external consumers that path-depend on solobase from a</span>
+<span class="comment"># sibling directory.</span>
+manifest_path = <span class="string">"../solobase"</span></code></pre>
+<p>All sections except <code>[app]</code> are optional. Unknown fields are rejected at parse time.</p>
+
+<h3>Both at once?</h3>
+<p>A typical deployment has one or the other, rarely both:</p>
+<ul>
+    <li><strong>Server-side examples</strong> (<code>examples/blog</code>): <code>.env</code> only. The shell is prebuilt and configurable enough via env vars.</li>
+    <li><strong>Browser apps</strong> (<code>gizza-ai</code>, <code>solobase-web</code>): <code>solobase.toml</code> only. Built into a static bundle, deployed to a CDN.</li>
+    <li><strong>Apps that run a server AND ship a custom browser bundle</strong>: both files coexist in the repo. <code>.env</code> configures the server; the TOML configures the build.</li>
+</ul>
+
 <h2 id="config-env">Environment Variables</h2>
 
 <h3>Core</h3>
@@ -991,6 +1097,63 @@ FEATURE_MONITORING=false \
 FEATURE_LEGALPAGES=false \
 JWT_SECRET=my-secret \
 ./solobase</code></pre>
+
+<!-- ====================================================================== -->
+<h1 id="cli-reference" style="margin-top:3rem">CLI Reference</h1>
+<p>The <code>solobase</code> binary is one CLI with two verbs and a target flag. It auto-detects whether you're working in a sealed (no Rust) or embed (Cargo project) directory and dispatches accordingly.</p>
+
+<h2 id="cli-verbs">Verbs</h2>
+<pre><code>solobase build  [--target native|web] [--release]
+solobase serve  [--target native|web] [--release] [--port N]
+solobase                              <span class="comment"># alias for `serve --target native`</span></code></pre>
+<ul>
+    <li><strong><code>build</code></strong> &mdash; produce the artifact for <code>--target</code>. Default profile is debug; pass <code>--release</code> for production builds.</li>
+    <li><strong><code>serve</code></strong> &mdash; <code>build</code> then run a server. For native: boots the Solobase server in-process using <code>.env</code>. For web: starts a static HTTP server over the produced <code>dist/</code>.</li>
+</ul>
+
+<h2 id="cli-modes">Modes</h2>
+<p>The CLI auto-detects the mode from the directory:</p>
+<ul>
+    <li><strong>Sealed</strong> (no <code>Cargo.toml</code> in cwd or any parent) &mdash; uses the prebuilt server bin and the bundled <code>solobase-web</code> wasm. Zero Rust required.</li>
+    <li><strong>Embed</strong> (<code>Cargo.toml</code> present) &mdash; compiles the user's crate via <code>cargo</code> (native) or <code>wasm-pack</code> (web).</li>
+</ul>
+
+<h2 id="cli-targets">Targets</h2>
+<p>When <code>--target</code> is omitted:</p>
+<ul>
+    <li>Sealed mode &rarr; defaults to <code>native</code>.</li>
+    <li>Embed mode &rarr; reads the discovered <code>Cargo.toml</code>:
+        <ul>
+            <li>has <code>[[bin]]</code> only &rarr; <code>native</code></li>
+            <li>has <code>crate-type = ["cdylib"]</code> only &rarr; <code>web</code></li>
+            <li>both / neither &rarr; error: specify <code>--target</code></li>
+        </ul>
+    </li>
+</ul>
+
+<h2 id="cli-profiles">Profiles</h2>
+<p><code>--release</code> flag, off by default. Iteration UX stays fast (debug); flip on for prod-like builds.</p>
+
+<h2 id="cli-env-overrides">Environment Overrides</h2>
+<p>The CLI itself reads a small set of environment variables that affect <em>how</em> it runs subprocesses. These are distinct from the runtime variables consumed by <code>serve</code> &mdash; for those, see <a href="#config-env">Environment Variables</a>.</p>
+<table>
+    <tr><th>Variable</th><th>Effect</th></tr>
+    <tr><td><code>SOLOBASE_WEB_WASM</code></td><td>Path to a <code>.wasm</code> file used instead of the bundled one.</td></tr>
+    <tr><td><code>SOLOBASE_CLI_DRY_RUN</code></td><td>Print every subprocess as <code>DRY_RUN ...</code> instead of running it.</td></tr>
+</table>
+
+<h2 id="cli-examples">Examples</h2>
+<p>Build the current dir for the browser:</p>
+<pre><code>solobase build --target web</code></pre>
+
+<p>Run the native server in dev mode (debug profile, picks up <code>solobase.toml</code> overlays):</p>
+<pre><code>solobase serve</code></pre>
+
+<p>Same, with a different port:</p>
+<pre><code>solobase serve --port 9000</code></pre>
+
+<p>Production browser build:</p>
+<pre><code>solobase build --target web --release</code></pre>
 
 <!-- ====================================================================== -->
 <h1 id="api-reference" style="margin-top:3rem">API Reference</h1>
