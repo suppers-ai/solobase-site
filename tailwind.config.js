@@ -1,5 +1,14 @@
+import sitekitPreset from '@suppers-ai/site-kit/tailwind-preset';
+import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
+import aspectRatio from '@tailwindcss/aspect-ratio';
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  // Site-kit preset maps every --sa-* token onto a Tailwind utility
+  // (`bg-sa-accent`, `text-sa-muted`, `px-sa-4`, etc.). Local extensions
+  // below add the Solobase-specific tokens that aren't part of the kit.
+  presets: [sitekitPreset],
   content: [
     './index.html',
     './why/**/*.html',
@@ -9,6 +18,11 @@ export default {
   ],
   theme: {
     extend: {
+      // Solobase brand orange, kept as named tints so marketing-page
+      // gradients/banners can pick the exact step they need. The kit's
+      // --sa-accent / --sa-accent-hover stay overridden in main.css to
+      // keep the kit components (sa-header link hovers, sa-hero CTAs)
+      // matching this palette.
       colors: {
         primary: {
           50: '#fff4ed',
@@ -23,23 +37,6 @@ export default {
           900: '#661a10',
           950: '#380a06',
         },
-        gray: {
-          50: '#f9fafb',
-          100: '#f3f4f6',
-          200: '#e5e7eb',
-          300: '#d1d5db',
-          400: '#9ca3af',
-          500: '#6b7280',
-          600: '#4b5563',
-          700: '#374151',
-          800: '#1f2937',
-          900: '#111827',
-          950: '#030712',
-        }
-      },
-      fontFamily: {
-        sans: ['Itim', 'cursive'],
-        mono: ['Itim', 'monospace'],
       },
       typography: {
         DEFAULT: {
@@ -95,9 +92,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [typography, forms, aspectRatio],
 }
