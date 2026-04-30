@@ -10,6 +10,12 @@
 :root {
   --sa-accent: #fe6627;
   --sa-accent-hover: #b72a07;
+  /* On-accent foreground. Solobase-orange + kit-default white = 3.5:1
+   * (fails AA normal text). Pair with the kit's deep ink (slate-900)
+   * for 5.4:1 (AA pass). The site's bespoke gradient/CTA buttons
+   * keep their existing white text via --primary-hover-derived
+   * gradients. */
+  --sa-on-accent: #111827;
 
   /* Legacy aliases. */
   --primary:        var(--sa-accent);
