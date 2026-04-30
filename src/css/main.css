@@ -2,28 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Custom Properties */
+/* Site-kit foundation (--sa-*) is loaded via index.html. We override the
+ * accent for the Solobase brand and alias legacy --primary/--text-* names
+ * onto the kit so existing styles in this file don't need a search-and-
+ * replace pass. Tokens with no kit equivalent (the dark IDE-style code
+ * surfaces) are kept bespoke. */
 :root {
-  --primary: #fe6627;
-  --primary-hover: #b72a07;
-  --primary-dark: #9a1f0a;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --bg-white: #ffffff;
-  --bg-gray: #f9fafb;
-  --border: #e5e7eb;
-  --code-bg: #1e1e1e;
+  --sa-accent: #fe6627;
+  --sa-accent-hover: #b72a07;
+
+  /* Legacy aliases. */
+  --primary:        var(--sa-accent);
+  --primary-hover:  var(--sa-accent-hover);
+  --primary-dark:   #9a1f0a;
+  --text-primary:   var(--sa-text);
+  --text-secondary: var(--sa-text-muted);
+  --bg-white:       var(--sa-bg-card);
+  --bg-gray:        var(--sa-bg);
+  --border:         var(--sa-border);
+
+  /* Bespoke — kit's --sa-code-block-bg is #1e1e1e (matches), but keeping
+   * named legacy vars makes the diff smaller. */
+  --code-bg:     var(--sa-code-block-bg);
+  --code-text:   var(--sa-code-block-fg);
   --code-border: #2d2d30;
-  --code-text: #d4d4d4;
 }
 
-/* Global font */
-* {
-  font-family: 'Itim', cursive !important;
+/* Body inherits Itim from the kit's --sa-font-sans token. The previous
+ * `* { font-family: !important }` rule was overly aggressive — it forced
+ * Itim onto monospace surfaces too. Now <code>/<pre> follow the kit's
+ * mono token. */
+body {
+  font-family: var(--sa-font-sans);
 }
 
 code, pre, pre code {
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  font-family: var(--sa-font-mono);
 }
 
 /* Smooth scrolling */
