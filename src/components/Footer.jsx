@@ -12,7 +12,7 @@ export default function Footer() {
         <img
           src="/images/logo_long.png"
           alt={siteConfig.title}
-          style={{ height: '40px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+          style={{ height: '40px', width: 'auto' }}
         />
         <p style={{ marginTop: 'var(--sa-space-3)', color: 'var(--sa-text-muted)', fontSize: 'var(--sa-text-sm)', maxWidth: '24rem' }}>
           {siteConfig.description}
