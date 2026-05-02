@@ -64,6 +64,26 @@ sa-footer {
   }
 }
 
+/* Mobile header: regroup so the brand and social icons share row 1,
+ * and the nav (which the kit already styles as a horizontal-scroll
+ * strip on mobile) takes row 2 by itself. The kit's default mobile
+ * layout stacks all three parts on their own rows, which left the
+ * social icons looking orphaned below the nav. */
+@media (max-width: 720px) {
+  sa-header::part(container) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand actions"
+      "nav   nav";
+    align-items: center;
+    gap: var(--sa-space-3);
+  }
+  sa-header::part(brand)   { grid-area: brand; }
+  sa-header::part(nav)     { grid-area: nav; }
+  sa-header::part(actions) { grid-area: actions; }
+}
+
 /* Logo: source asset is dark on transparent. brightness(0) flattens to
  * black, invert(1) flips to pure white. Cheaper than a parallel
  * white-logo asset and avoids two-file drift. */
@@ -80,7 +100,12 @@ sa-footer {
 }
 
 @media (max-width: 720px) {
+  /* Stack categories cleanly. Without flex-direction:column the wrap
+   * lands as 2 columns + an orphan Community row, which looks broken.
+   * Full-width single-column stack reads better at phone widths. */
   .solobase-footer-grid {
+    flex-direction: column;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     gap: var(--sa-space-8);
   }
