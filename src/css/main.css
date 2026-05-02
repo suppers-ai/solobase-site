@@ -46,6 +46,24 @@ sa-footer {
   --sa-footer-border: #1e293b;
 }
 
+/* Header layout overrides: push the nav cluster to the right next to
+ * the social icons and put a hairline separator between them. The kit
+ * exposes "nav" and "actions" via ::part() so we don't need to fork
+ * the component. flex-grow:0 + margin-left:auto on nav pushes nav and
+ * actions together against the right edge; the brand stays on the
+ * left. */
+@media (min-width: 721px) {
+  sa-header::part(nav) {
+    flex-grow: 0;
+    margin-left: auto;
+  }
+  sa-header::part(actions) {
+    border-left: 1px solid var(--sa-border);
+    padding-left: var(--sa-space-4);
+    margin-left: var(--sa-space-4);
+  }
+}
+
 /* Logo: source asset is dark on transparent. brightness(0) flattens to
  * black, invert(1) flips to pure white. Cheaper than a parallel
  * white-logo asset and avoids two-file drift. */
@@ -54,10 +72,18 @@ sa-footer {
 }
 
 .solobase-footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--sa-space-8);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sa-space-12);
   width: 100%;
+}
+
+@media (max-width: 720px) {
+  .solobase-footer-grid {
+    justify-content: flex-start;
+    gap: var(--sa-space-8);
+  }
 }
 
 .solobase-footer-column {
