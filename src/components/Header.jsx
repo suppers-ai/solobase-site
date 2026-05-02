@@ -46,7 +46,7 @@ export default function Header({ onOpenDemo }) {
           )
         )}
       </nav>
-      <div slot="actions" style={{ display: 'flex', alignItems: 'center', gap: 'var(--sa-space-3)' }}>
+      <div slot="actions" style={{ display: 'flex', alignItems: 'center', gap: 'var(--sa-space-4)' }}>
         {socialLinks.map((item) => (
           <a
             key={item.name}
