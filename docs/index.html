@@ -158,6 +158,35 @@
             .endpoint-desc { margin-left: 0; width: 100%; margin-top: 0.25rem; }
         }
 
+        /* Phone: header is two rows on this breakpoint (brand + actions
+         * on row 1, nav on row 2), so it's ~104px tall — the desktop
+         * default of 64px would leave the toggle button overlapping
+         * the nav row and the open drawer occluding the header. Bump
+         * --header-h, let the drawer go edge-to-edge, and reserve a
+         * top-padding strip in the content so the floating toggle
+         * doesn't sit on top of the h1. */
+        @media (max-width: 720px) {
+            :root { --header-h: 104px; }
+            .sidebar.open {
+                top: var(--header-h);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: auto;
+                border-radius: 0;
+                border: 0;
+                border-top: 1px solid var(--border);
+                padding: 1rem 0;
+            }
+            .sidebar-toggle {
+                top: calc(var(--header-h) + 0.5rem);
+                left: 0.75rem;
+            }
+            /* Reserve room beneath the floating toggle so the first
+             * heading isn't sitting under it. */
+            .content { padding-top: 3.5rem; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             * { scroll-behavior: auto !important; }
         }
