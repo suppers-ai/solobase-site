@@ -34,6 +34,57 @@
   --code-border: #2d2d30;
 }
 
+/* Dark footer band: the kit exposes --sa-footer-* tokens with light
+ * defaults; we override them here so the page footer reads as a deep
+ * slate band beneath the white content. The categorized column layout
+ * (.solobase-footer-*) is purely consumer-side; the kit just gives us
+ * the chrome and the theme hooks. */
+sa-footer {
+  --sa-footer-bg: #0f172a;
+  --sa-footer-text: #e2e8f0;
+  --sa-footer-text-muted: #94a3b8;
+  --sa-footer-border: #1e293b;
+}
+
+/* Logo: source asset is dark on transparent. brightness(0) flattens to
+ * black, invert(1) flips to pure white. Cheaper than a parallel
+ * white-logo asset and avoids two-file drift. */
+.solobase-footer-logo {
+  filter: brightness(0) invert(1);
+}
+
+.solobase-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sa-space-8);
+  width: 100%;
+}
+
+.solobase-footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sa-space-2);
+}
+
+.solobase-footer-column h4 {
+  font-size: var(--sa-text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sa-footer-text-muted);
+  margin: 0 0 var(--sa-space-2);
+}
+
+.solobase-footer-column a {
+  color: var(--sa-footer-text);
+  text-decoration: none;
+  font-size: var(--sa-text-sm);
+}
+
+.solobase-footer-column a:hover {
+  color: var(--sa-accent);
+}
+
 /* Body inherits Itim from the kit's --sa-font-sans token. The previous
  * `* { font-family: !important }` rule was overly aggressive — it forced
  * Itim onto monospace surfaces too. Now <code>/<pre> follow the kit's
