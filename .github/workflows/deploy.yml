@@ -19,18 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: solobase-site
+
+      - uses: actions/checkout@v4
+        with:
+          repository: suppers-ai/site-kit
+          path: site-kit
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: solobase-site/package-lock.json
 
       - run: npm ci
+        working-directory: solobase-site
       - run: npm run build
+        working-directory: solobase-site
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/site
+          path: solobase-site/dist/site
 
   deploy:
     needs: build
