@@ -82,6 +82,18 @@ sa-footer {
   sa-header::part(brand)   { grid-area: brand; }
   sa-header::part(nav)     { grid-area: nav; }
   sa-header::part(actions) { grid-area: actions; }
+
+  /* Spread the 5 nav items evenly across the full row instead of
+   * clustering left. The slotted <nav> is in light DOM, so a regular
+   * descendant selector reaches it (and outranks the kit's
+   * ::slotted(nav[slot="nav"]) rule on specificity). The kit's mobile
+   * style sets overflow-x:auto for many-item navs; for our 5 short
+   * labels everything fits, so even spread reads better than
+   * left-cluster. */
+  sa-header nav[slot="nav"] {
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
 /* Logo: source asset is dark on transparent. brightness(0) flattens to
