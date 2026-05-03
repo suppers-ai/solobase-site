@@ -1,7 +1,9 @@
 import { render } from 'preact';
+import { useState } from 'preact/hooks';
 import '../css/main.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import DemoModal from '../components/DemoModal';
 import UseCaseCard from '../components/UseCaseCard';
 import { groups, useCases } from '../data/use-cases';
 
@@ -33,9 +35,12 @@ const faqs = [
 ];
 
 function WhyPage() {
+  const [demoOpen, setDemoOpen] = useState(false);
+  const openDemo = () => setDemoOpen(true);
+
   return (
     <>
-      <Header />
+      <Header onOpenDemo={openDemo} />
       <main>
         {/* Why this exists */}
         <section class="max-w-3xl mx-auto px-6 pt-16 sm:pt-20 pb-12 text-center">
@@ -204,12 +209,11 @@ function WhyPage() {
             browser.
           </p>
           <div class="flex justify-center gap-3 flex-wrap">
-            <a
-              href="https://demo.solobase.dev"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={openDemo}
               class="inline-flex items-center px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-              style={{ background: 'var(--primary)' }}
+              style={{ background: 'var(--primary)', border: 'none', cursor: 'pointer' }}
               onMouseOver={(e) =>
                 (e.currentTarget.style.background = 'var(--primary-hover)')
               }
@@ -218,7 +222,7 @@ function WhyPage() {
               }
             >
               Try in Browser
-            </a>
+            </button>
             <a
               href="/"
               class="inline-flex items-center px-6 py-3 rounded-lg font-semibold text-white bg-gray-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-700"
@@ -228,7 +232,8 @@ function WhyPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer onOpenDemo={openDemo} />
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </>
   );
 }
