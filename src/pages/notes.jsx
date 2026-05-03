@@ -1,12 +1,17 @@
 import { render } from 'preact';
+import { useState } from 'preact/hooks';
 import '../css/main.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import DemoModal from '../components/DemoModal';
 
 function NotesPage() {
+  const [demoOpen, setDemoOpen] = useState(false);
+  const openDemo = () => setDemoOpen(true);
+
   return (
     <>
-      <Header />
+      <Header onOpenDemo={openDemo} />
       <main>
         <section class="max-w-2xl mx-auto px-6 py-16 sm:py-20">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4 leading-tight">
@@ -128,7 +133,8 @@ function NotesPage() {
           </p>
         </section>
       </main>
-      <Footer />
+      <Footer onOpenDemo={openDemo} />
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </>
   );
 }

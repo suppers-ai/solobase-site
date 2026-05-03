@@ -127,7 +127,7 @@ function CodeBlock() {
   );
 }
 
-function GetStarted() {
+function GetStarted({ onOpenDemo }) {
   return (
     <section style={{ background: "#ffffff", padding: "0 1.5rem 4rem" }}>
       <div class="max-w-2xl mx-auto">
@@ -154,17 +154,18 @@ function GetStarted() {
           >
             No time to run a command? I feel you.
           </p>
-          <a
-            href="https://demo.solobase.dev"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={onOpenDemo}
             style={{
               padding: "0.75rem 1.75rem",
               background: "#fe6627",
               color: "white",
+              border: "none",
               borderRadius: "0.5rem",
               fontWeight: 600,
               fontSize: "1rem",
+              cursor: "pointer",
               transition: "background 0.15s",
               whiteSpace: "nowrap",
             }}
@@ -172,7 +173,7 @@ function GetStarted() {
             onMouseOut={(e) => (e.currentTarget.style.background = "#fe6627")}
           >
             Demo website
-          </a>
+          </button>
         </div>
       </div>
     </section>
@@ -367,24 +368,25 @@ function BottomCTA({ onOpenDemo }) {
           Ready to get started?
         </h2>
         <div class="flex justify-center gap-4 flex-wrap">
-          <a
-            href="https://demo.solobase.dev"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={onOpenDemo}
             style={{
               display: "inline-block",
               padding: "0.75rem 2rem",
               background: "#1f2937",
               color: "white",
+              border: "none",
               borderRadius: "0.5rem",
               fontWeight: 600,
+              cursor: "pointer",
               transition: "background 0.2s",
             }}
             onMouseOver={(e) => (e.currentTarget.style.background = "#374151")}
             onMouseOut={(e) => (e.currentTarget.style.background = "#1f2937")}
           >
             Demo
-          </a>
+          </button>
           <a
             href="/docs/"
             style={{
@@ -445,12 +447,12 @@ function HomePage() {
           </a>
         </div>
         <Hero />
-        <GetStarted />
+        <GetStarted onOpenDemo={() => setDemoOpen(true)} />
         <PlatformAgnostic />
         <AgentReady />
         <BottomCTA onOpenDemo={() => setDemoOpen(true)} />
       </main>
-      <Footer />
+      <Footer onOpenDemo={() => setDemoOpen(true)} />
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </>
   );

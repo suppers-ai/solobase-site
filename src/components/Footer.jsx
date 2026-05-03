@@ -11,7 +11,7 @@ const productLinks = [
   { name: 'Home', url: '/' },
   { name: 'Why', url: '/why/' },
   { name: 'Notes', url: '/notes/' },
-  { name: 'Demo', url: siteConfig.demoUrl, external: true },
+  { name: 'Demo', isDemo: true },
 ];
 
 const docsLinks = [
@@ -27,24 +27,34 @@ const communityLinks = [
   { name: 'Discord', url: siteConfig.discordUrl, external: true },
 ];
 
-function Column({ title, links }) {
+function Column({ title, links, onOpenDemo }) {
   return (
     <nav class="solobase-footer-column" aria-label={title}>
       <h4>{title}</h4>
-      {links.map((link) => (
-        <a
-          key={link.name}
-          href={link.url}
-          {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        >
-          {link.name}
-        </a>
-      ))}
+      {links.map((link) =>
+        link.isDemo ? (
+          <a
+            key={link.name}
+            href="#"
+            onClick={(e) => { e.preventDefault(); onOpenDemo?.(); }}
+          >
+            {link.name}
+          </a>
+        ) : (
+          <a
+            key={link.name}
+            href={link.url}
+            {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {link.name}
+          </a>
+        )
+      )}
     </nav>
   );
 }
 
-export default function Footer() {
+export default function Footer({ onOpenDemo }) {
   const year = new Date().getFullYear();
 
   return (
@@ -61,7 +71,7 @@ export default function Footer() {
         </p>
       </div>
       <div slot="links" class="solobase-footer-grid">
-        <Column title="Product" links={productLinks} />
+        <Column title="Product" links={productLinks} onOpenDemo={onOpenDemo} />
         <Column title="Documentation" links={docsLinks} />
         <Column title="Community" links={communityLinks} />
       </div>

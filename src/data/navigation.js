@@ -13,7 +13,7 @@ export const mainMenu = [
   { name: "Notes", url: "/notes/" },
   { name: "Why", url: "/why/" },
   { name: "Docs", url: "/docs/" },
-  { name: "Demo", url: "https://demo.solobase.dev", external: true },
+  { name: "Demo", isDemo: true },
 ];
 
 export const socialLinks = [
