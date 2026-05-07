@@ -127,56 +127,131 @@ function CodeBlock() {
   );
 }
 
+// AI-agent escape hatch — one line of text + a copy button. The text is
+// phrased as an instruction the user can paste straight into a coding
+// assistant; the URL stays clickable for humans who want to read it.
+const SKILL_PROMPT = "Read and make a skill from https://solobase.dev/SKILL.md";
+
+function SkillPrompt() {
+  const [copied, setCopied] = useState(false);
+
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(SKILL_PROMPT);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard blocked — no fallback needed; user can select the text
+    }
+  };
+
+  return (
+    <div
+      style={{
+        marginTop: "1.25rem",
+        border: "1px solid #e5e7eb",
+        borderRadius: "0.5rem",
+        padding: "0.85rem 1rem",
+        background: "#fafafa",
+      }}
+    >
+      <h4
+        style={{
+          margin: "0 0 0.4rem",
+          fontSize: "0.7rem",
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          color: "#6b7280",
+        }}
+      >
+        For AI agents
+      </h4>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+        }}
+      >
+      <p
+        style={{
+          margin: 0,
+          fontSize: "0.95rem",
+          lineHeight: 1.5,
+          color: "#374151",
+          flex: 1,
+          minWidth: 0,
+          overflowWrap: "anywhere",
+        }}
+      >
+        Read and make a skill from{" "}
+        <a
+          href="/SKILL.md"
+          style={{ color: "#fe6627", fontWeight: 600 }}
+        >
+          https://solobase.dev/SKILL.md
+        </a>
+      </p>
+      <button
+        type="button"
+        onClick={onCopy}
+        aria-label={copied ? "Copied" : "Copy instruction"}
+        title={copied ? "Copied" : "Copy"}
+        style={{
+          flexShrink: 0,
+          padding: "0.4rem",
+          background: "transparent",
+          border: "1px solid #d1d5db",
+          borderRadius: "0.35rem",
+          cursor: "pointer",
+          color: copied ? "#16a34a" : "#6b7280",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "color 0.15s, border-color 0.15s",
+        }}
+      >
+        {copied ? (
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        )}
+      </button>
+      </div>
+    </div>
+  );
+}
+
 function GetStarted({ onOpenDemo }) {
   return (
     <section style={{ background: "#ffffff", padding: "0 1.5rem 4rem" }}>
       <div class="max-w-2xl mx-auto">
         <CodeBlock />
-        {/* AI-agent escape hatch — point an agent at the operating manual */}
-        <div
-          style={{
-            marginTop: "1.25rem",
-            border: "1px solid #e5e7eb",
-            borderRadius: "0.5rem",
-            padding: "1rem 1.25rem",
-            background: "#fafafa",
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: "0.75rem 1rem",
-            justifyContent: "space-between",
-          }}
-        >
-          <p
-            class="text-gray-700"
-            style={{ margin: 0, fontSize: "0.95rem", lineHeight: 1.5 }}
-          >
-            Building with an AI agent? Point it at{" "}
-            <a
-              href="/SKILL.md"
-              style={{ color: "#fe6627", fontWeight: 600 }}
-            >
-              SKILL.md
-            </a>
-            .
-          </p>
-          <code
-            style={{
-              fontSize: "0.78rem",
-              padding: "0.35rem 0.6rem",
-              background: "#1e1e1e",
-              color: "#d4d4d4",
-              borderRadius: "0.35rem",
-              fontFamily:
-                "'Consolas', 'Monaco', 'Courier New', monospace",
-              whiteSpace: "nowrap",
-              overflowX: "auto",
-              maxWidth: "100%",
-            }}
-          >
-            curl -sSL https://solobase.dev/SKILL.md
-          </code>
-        </div>
+        <SkillPrompt />
         {/* Browser demo — no-install escape hatch */}
         <div
           class="flex flex-col items-center text-center"
