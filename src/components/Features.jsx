@@ -108,11 +108,10 @@ export default function Features() {
                   <span class="text-gray-500"># Download the latest release</span>{'\n'}
                   <span class="text-white">curl -sSL https://github.com/suppers-ai/solobase/releases/latest/download/solobase-linux-amd64.tar.gz | tar xz</span>{'\n'}
                   {'\n'}
-                  <span class="text-gray-500"># Set a JWT secret and run</span>{'\n'}
-                  <span class="text-white">export JWT_SECRET="your-secret-key-at-least-32-chars"</span>{'\n'}
+                  <span class="text-gray-500"># Run it</span>{'\n'}
                   <span class="text-white">./solobase</span>{'\n'}
                   {'\n'}
-                  <span class="text-gray-500"># That's it. Auth, database, storage, products, admin panel — all running on :8090</span>
+                  <span class="text-gray-500"># Auth, database, storage, AI, admin panel — all running on :8090</span>
                 </code>
               </pre>
             </div>
@@ -122,7 +121,7 @@ export default function Features() {
               </p>
               <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                  href="/docs/quick-start/"
+                  href="/docs/#quick-start"
                   class="inline-flex items-center justify-center px-6 py-3 text-white rounded-lg font-medium transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
                   style={{ background: '#1f2937', fontSize: '1.1rem', minWidth: '180px' }}
                 >
