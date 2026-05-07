@@ -15,11 +15,11 @@ const productLinks = [
 ];
 
 const docsLinks = [
-  { name: 'Docs', url: '/docs/' },
-  { name: 'Installation', url: '/docs/installation/' },
-  { name: 'Configuration', url: '/docs/configuration/' },
-  { name: 'API Reference', url: '/docs/api/auth/' },
-  { name: 'Deployment', url: '/docs/deployment/docker/' },
+  { name: 'Quick start', url: '/docs/#quick-start' },
+  { name: "What's inside", url: '/docs/#whats-inside' },
+  { name: 'Configuration', url: '/docs/#config' },
+  { name: 'CLI', url: '/docs/#cli' },
+  { name: 'Deploy to Cloudflare', url: '/docs/#deploy-cloudflare' },
 ];
 
 const communityLinks = [

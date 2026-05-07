@@ -95,7 +95,7 @@ export default function Extensions() {
             Build your own extensions or explore community contributions
           </p>
           <a
-            href="/docs/extensions/"
+            href="/docs/#custom-blocks"
             class="inline-flex items-center justify-center px-6 py-3 text-white rounded-lg font-medium transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
             style={{ background: '#1f2937' }}
           >
