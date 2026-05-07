@@ -132,6 +132,51 @@ function GetStarted({ onOpenDemo }) {
     <section style={{ background: "#ffffff", padding: "0 1.5rem 4rem" }}>
       <div class="max-w-2xl mx-auto">
         <CodeBlock />
+        {/* AI-agent escape hatch — point an agent at the operating manual */}
+        <div
+          style={{
+            marginTop: "1.25rem",
+            border: "1px solid #e5e7eb",
+            borderRadius: "0.5rem",
+            padding: "1rem 1.25rem",
+            background: "#fafafa",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "0.75rem 1rem",
+            justifyContent: "space-between",
+          }}
+        >
+          <p
+            class="text-gray-700"
+            style={{ margin: 0, fontSize: "0.95rem", lineHeight: 1.5 }}
+          >
+            Building with an AI agent? Point it at{" "}
+            <a
+              href="/SKILL.md"
+              style={{ color: "#fe6627", fontWeight: 600 }}
+            >
+              SKILL.md
+            </a>
+            .
+          </p>
+          <code
+            style={{
+              fontSize: "0.78rem",
+              padding: "0.35rem 0.6rem",
+              background: "#1e1e1e",
+              color: "#d4d4d4",
+              borderRadius: "0.35rem",
+              fontFamily:
+                "'Consolas', 'Monaco', 'Courier New', monospace",
+              whiteSpace: "nowrap",
+              overflowX: "auto",
+              maxWidth: "100%",
+            }}
+          >
+            curl -sSL https://solobase.dev/SKILL.md
+          </code>
+        </div>
         {/* Browser demo — no-install escape hatch */}
         <div
           class="flex flex-col items-center text-center"
