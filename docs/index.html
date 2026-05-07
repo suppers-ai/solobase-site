@@ -176,6 +176,9 @@
     <h4>Going further</h4>
     <a href="#admin-tour">Admin panel tour</a>
     <a href="#custom-blocks">Custom blocks</a>
+    <a href="#custom-blocks-wasm" style="padding-left:2.5rem">&hellip; sandboxed WASM</a>
+    <a href="#custom-blocks-native" style="padding-left:2.5rem">&hellip; compile-in Rust</a>
+    <a href="#custom-blocks-grants" style="padding-left:2.5rem">&hellip; WRAP grants</a>
     <a href="#help">Get help</a>
 </nav>
 
@@ -337,7 +340,106 @@ solobase deploy --target cloudflare --release</code></pre>
 
 <!-- ====================================================================== -->
 <h2 id="custom-blocks">Custom blocks</h2>
-<p>You can extend Solobase by writing your own blocks in Rust (compiled into the binary) or shipping them as sandboxed WebAssembly modules uploaded through the admin panel. The block API and the WRAP grant model are documented in the <a href="https://github.com/suppers-ai/solobase" target="_blank">main repo</a> — start with the example apps and the existing blocks under <code>crates/solobase-core/src/blocks/</code>.</p>
+
+<p>A block is a self-contained feature — a slice of database, an HTTP handler, a skill an LLM can call. You can ship one as a sandboxed WebAssembly module (the easy path) or compile it into a custom build (when you need direct host access).</p>
+
+<h3 id="custom-blocks-wasm">A sandboxed WASM block</h3>
+
+<p>This is the path most people want: write Rust, compile to <code>.wasm</code>, upload through the admin panel. The block runs in a sandbox with no filesystem, no network, and no database access except what you explicitly grant.</p>
+
+<p>A complete <em>calculator</em> block — takes a math expression, returns the result:</p>
+
+<pre><code><span class="comment">// src/lib.rs</span>
+use serde::Deserialize;
+use wafer_sdk::*;
+
+#[derive(Deserialize)]
+struct Args { expr: String }
+
+struct Calculator;
+
+#[wafer_block(
+    name = "my-org/calculator",
+    version = "0.1.0",
+    interface = "handler@v1",
+    summary = "Evaluate a math expression",
+    skill(
+        description = "Evaluate an arithmetic expression (e.g. '2+2*3').",
+        parameters = r#"{
+            "type": "object",
+            "properties": {
+                "expr": { "type": "string" }
+            },
+            "required": ["expr"]
+        }"#
+    ),
+)]
+impl Calculator {
+    fn handle(_msg: Message, body: Vec&lt;u8&gt;) -&gt; GuestResult {
+        let args: Args = serde_json::from_slice(&amp;body).unwrap();
+        match meval::eval_str(&amp;args.expr) {
+            Ok(v)  =&gt; GuestResult::respond(
+                serde_json::to_vec(&amp;serde_json::json!({ "result": v })).unwrap()
+            ),
+            Err(e) =&gt; GuestResult::respond(
+                serde_json::to_vec(&amp;serde_json::json!({ "error": e.to_string() })).unwrap()
+            ),
+        }
+    }
+}</code></pre>
+
+<p>And the <code>Cargo.toml</code> alongside it:</p>
+
+<pre><code>[package]
+name = "calculator"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wafer-sdk = { git = "https://github.com/wafer-run/wafer-run" }
+serde      = { version = "1", features = ["derive"] }
+serde_json = "1"
+meval      = "0.2"</code></pre>
+
+<p>Build the wasm and upload it:</p>
+<pre><code>cargo build --release --target wasm32-unknown-unknown
+<span class="comment"># Then drag the .wasm into /b/admin/blocks/ → "Upload custom block"</span></code></pre>
+
+<p>The <code>skill(&hellip;)</code> attribute is optional — include it if you want the LLM block to be able to call this one as a tool. The <code>parameters</code> JSON Schema is what the model sees.</p>
+
+<h3 id="custom-blocks-native">A compile-in Rust block</h3>
+
+<p>If you need direct host access — calling out to a database, the filesystem, or other blocks — embed Solobase as a library and register your block at startup. Implement the <code>Block</code> trait:</p>
+
+<pre><code>use wafer_run::{block::{Block, BlockInfo}, context::Context, types::*, InputStream, OutputStream};
+
+pub struct PingBlock;
+
+#[async_trait::async_trait]
+impl Block for PingBlock {
+    fn info(&amp;self) -&gt; BlockInfo {
+        BlockInfo::new("my-org/ping", "0.1.0", "http-handler@v1", "Ping pong")
+            .endpoints(vec![BlockEndpoint::get("/b/ping/").summary("Pong")])
+    }
+
+    async fn handle(&amp;self, _ctx: &amp;dyn Context, _msg: Message, _input: InputStream) -&gt; OutputStream {
+        ok_json(&amp;serde_json::json!({ "pong": true }))
+    }
+}</code></pre>
+
+<p>Register it in your app's <code>main.rs</code>:</p>
+<pre><code>w.register_block("my-org/ping".into(), PingBlock).unwrap();</code></pre>
+
+<p>Then <code>solobase build</code> as usual.</p>
+
+<h3 id="custom-blocks-grants">WRAP grants</h3>
+
+<p>By default a block can only read and write its own tables (named <code>my_org__calculator__*</code>) and only fetch URLs you've allowed. To let one block touch another's data, add a grant from <strong>Admin → WRAP grants</strong>. The audit log on the same page shows every cross-block access attempt, allowed or denied.</p>
+
+<p>For a longer tour of the SDK, look at the existing blocks under <code>crates/solobase-core/src/blocks/</code> in the <a href="https://github.com/suppers-ai/solobase" target="_blank">main repo</a> — they range from a 90-line health-check block (<code>system.rs</code>) up to the full LLM router.</p>
 
 <!-- ====================================================================== -->
 <h2 id="help">Get help</h2>
