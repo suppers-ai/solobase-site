@@ -1,0 +1,36 @@
+# Solobase
+
+> Open-source backend in a single binary — auth, database, file storage,
+> admin panel, LLM/RAG, and payments. Runs on Linux, macOS, Windows, in
+> the browser via WebAssembly, or on Cloudflare Workers. Built on the
+> WAFER block runtime; extend with sandboxed WASM blocks.
+
+## Start here
+
+- [SKILL.md](https://solobase.dev/SKILL.md): Operating manual for AI
+  agents — install, run, discover blocks, write extensions, verify.
+- [Documentation (markdown)](https://solobase.dev/docs/index.md): Full
+  docs as raw markdown — quick start, configuration, CLI, deploy
+  targets, custom blocks.
+- [Documentation (HTML)](https://solobase.dev/docs/): Same content
+  rendered for humans.
+
+## About the project
+
+- [Why Solobase](https://solobase.dev/why/): Origin story, design
+  rationale, AI-friendly properties.
+- [Notes / honest disclaimer](https://solobase.dev/notes/): What works,
+  what doesn't, current production-readiness.
+- [Homepage](https://solobase.dev/): Feature overview and demo.
+
+## Source and community
+
+- [GitHub repo](https://github.com/suppers-ai/solobase): Source code,
+  issues, releases.
+- [Latest release](https://github.com/suppers-ai/solobase/releases/latest):
+  Download binaries for Linux, macOS, Windows.
+- [Discord](https://discord.gg/jKqMcbrVzm): Community chat.
+
+## Optional
+
+- [Demo instance](https://demo.solobase.dev): Read-only live admin panel.

@@ -24,8 +24,28 @@ function servePublicIndex() {
   };
 }
 
+// Vite serves text/* without a charset by default, so browsers fall
+// back to latin-1 and mangle UTF-8 (em-dashes render as `â€"`). Set
+// charset=utf-8 for the markdown / text files we ship in public/.
+function utf8TextFiles() {
+  return {
+    name: 'utf8-text-files',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = (req.url ?? '').split('?')[0];
+        if (url.endsWith('.md')) {
+          res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+        } else if (url.endsWith('.txt')) {
+          res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [servePublicIndex(), preact()],
+  plugins: [utf8TextFiles(), servePublicIndex(), preact()],
   build: {
     outDir: 'dist/site',
     rollupOptions: {
